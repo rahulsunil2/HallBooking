@@ -1,0 +1,18 @@
+{% load socialaccount %}
+{% load static %}
+<html>
+  <head>
+    <title>Google Registration</title>
+  </head>
+  <body>
+  {% if user.is_authenticated %}
+  <h1>Login</h1>
+  <p>Welcome, {{ user.username }} !</p>
+ 
+  {% else %}
+  <h1>Login</h1>
+  <a href="{% provider_login_url 'google' %}"><img height="50" src="{% static 'G-Login.png' %}" alt=""/></a>
+  {% endif %}
+
+  </body>
+</html>
