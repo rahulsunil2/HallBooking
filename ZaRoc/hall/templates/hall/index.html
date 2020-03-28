@@ -1,0 +1,42 @@
+{% load socialaccount %}
+{% load staticfiles %}
+<html>
+    <head>
+		<title>Radius by TEMPLATED</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+    </head>
+    <body>
+        {% if user.is_authenticated %}
+            <header id="header">
+				<div class="inner">
+                    <div class="content">
+						<h1>HALL BOOKING</h1>
+						{% comment %} <h2>A fully responsive masonry-style<br />
+						portfolio template.</h2> {% endcomment %}
+						<a href="" class="button big alt"><span>search</span></a>
+					</div>
+					<a href="" class="button hidden"><span>search</span></a>
+				</div>
+			</header>
+            <p>Welcome, {{ user.username }} !</p>
+            <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+	        <script src="{% static 'assets/js/skel.min.js' %}"></script>
+		    <script src="{% static 'assets/js/util.js' %}"></script>
+		    <script src="{% static 'assets/js/main.js' %}"></script>
+ 
+        {% else %}
+            <header id="header">
+				<div class="inner">
+					<div class="content">
+						<h1>HALL BOOKING</h1>
+						{% comment %} <h2>A fully responsive masonry-style<br />
+						portfolio template.</h2> {% endcomment %}
+						<a href="{% provider_login_url 'google' %}" class="button big alt"><span>Sign in</span></a>
+					</div>
+				</div>
+			</header>
+        {% endif %}
+    </body>
+</html>
