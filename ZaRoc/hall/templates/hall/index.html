@@ -21,7 +21,13 @@
 					<a href="" class="button hidden"><span>search</span></a>
 				</div>
 			</header>
-			<a href="http://127.0.0.1:8000/accounts/logout/" class="button big alt"><span>log out</span></a> 
+			<form method="post" action="{% url 'account_logout' %}">
+  				{% csrf_token %}
+  				{% if redirect_field_value %}
+    				<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+  				{% endif %}
+  				<button class="button big alt" type="submit">Logout</button>
+			</form>
             <script src="{% static 'assets/js/jquery.min.js' %}"></script>
 	        <script src="{% static 'assets/js/skel.min.js' %}"></script>
 		    <script src="{% static 'assets/js/util.js' %}"></script>
