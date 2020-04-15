@@ -3,5 +3,7 @@ from django.http import HttpResponse
 
 # Create your views here.
 
-def index(request):
-    return HttpResponse("<h1>Hall Booking Site</h1>")
+def signin(request):
+    return render(request, 'signin.html')
+def home(request):
+    return render(request, 'home.html')
