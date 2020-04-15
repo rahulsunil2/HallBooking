@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Faculty(models.Model):
     id = models.DecimalField(primary_key=True, decimal_places=0, max_digits=10)

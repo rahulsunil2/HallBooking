@@ -1,0 +1,26 @@
+{% load socialaccount %}
+{% load staticfiles %}
+<html>
+    <head>
+		<title>ZaRoc</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel = "icon" href = "{% static 'images/logo.png' %}" type = "image/x-icon"> 
+    </head>
+    <body>
+        {% if user.is_authenticated %}
+			<h2>Welcome, {{ user.username }} </h2>
+			<form method="post" action="{% url 'account_logout' %}">
+  				{% csrf_token %}
+  				{% if redirect_field_value %}
+    				<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+  				{% endif %}
+  				<button type="submit">Logout</button>
+			</form>
+        {% else %}
+			<script>
+    			window.location = "{% url 'signin' %}";
+			</script>
+        {% endif %}
+    </body>
+</html>
