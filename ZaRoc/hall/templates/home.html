@@ -17,6 +17,11 @@
   				{% endif %}
   				<button class="button big alt" type="submit">Logout</button>
 			</form>
+			<form action="" method="post">
+            	{% csrf_token %}
+            	{{ form }}
+            	<input type="submit" value="Submit">
+        	</form>
         {% else %}
 			<script>
     			window.location = "{% url 'signin' %}";
