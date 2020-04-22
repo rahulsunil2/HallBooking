@@ -5,7 +5,7 @@ class Hall(models.Model):
     no = models.CharField(max_length=4, unique=True)
     name = models.CharField(max_length=60)
     capacity = models.DecimalField(max_digits=3, decimal_places=0)
-    inCharge = models.ForeignKey(User, models.PROTECT, default=1234)
+    inCharge = models.ForeignKey(User, models.PROTECT)
     class Meta:
         verbose_name_plural = "Halls"
 
