@@ -24,8 +24,8 @@
         <p>incharge: {{inCharge}}</p> 
 		<form action="" method="post">
             {% csrf_token %}
-            {{ form.date }}
-            <input type="submit" value="Submit">
+            Date: {{ form.date }}
+            <input type="submit" value="BOOK">
         </form>
         <script>
             $(function () {
