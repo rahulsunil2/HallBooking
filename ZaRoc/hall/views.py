@@ -33,10 +33,7 @@ def result(request):
         if Hall.objects.filter(name=value).exists():
             return render(request, 'result.html',{
             'form': form,
-            'name':value,
-            'inCharge':str(Hall.objects.only('inCharge').get(name=value).inCharge), 
-            'capacity':str(Hall.objects.only('capacity').get(name=value).capacity), 
-            'no':str(Hall.objects.only('no').get(name=value).no)
+            'details':Hall.objects.get(name=value),
             })
         else:
             return HttpResponse('<p>no such hall</p>')
