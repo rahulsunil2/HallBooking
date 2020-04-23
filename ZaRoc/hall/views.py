@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from .forms import *
-from .models import *
+from .models import Hall,Booking
+from django.contrib.auth.models import User
 # Create your views here.
 def signin(request):
     return render(request, 'signin.html')
@@ -19,26 +20,42 @@ def home(request):
         form = searchbar()   
         return render(request, 'home.html',{'form': form})
 def result(request):
-    value = request.GET.get('value')
-        #if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = DateForm(request.POST)
-        # check whether it's valid:
+    global value,sdate,edate,stime,etime
+    if 'check' in request.POST: #forms for time
+        frm2 = desc()
+        frm = detail(request.POST)
+        if frm.is_valid():
+            sdate = frm.cleaned_data.get('sdate')
+            edate = frm.cleaned_data.get('edate')
+            stime = frm.cleaned_data.get('stime')
+            etime = frm.cleaned_data.get('etime')
+            return render(request, 'result.html',{'name':value,
+            'inCharge':str(Hall.objects.only('inCharge').get(name=value).inCharge), 
+             'capacity':str(Hall.objects.only('capacity').get(name=value).capacity), 
+             'no':str(Hall.objects.only('no').get(name=value).no),'form':frm2,'ch':True})
+             
+    elif 'book' in request.POST: #forms for event
+        hall = Hall.objects.get(name=value)
+        c= request.user
+        n=c.username
+        i=c.id 
+        form = desc(request.POST)   
         if form.is_valid():
-            return HttpResponseRedirect('/book/?value=%s&date=%s' %(value,form.cleaned_data['date'],))
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form = DateForm()   
-        if Hall.objects.filter(name=value).exists():
-            return render(request, 'result.html',{
-            'form': form,
-            'details':Hall.objects.get(name=value),
-            })
-        else:
-            return HttpResponse('<p>no such hall</p>')
-def book(request):
+            ename = form.cleaned_data.get('eventName')
+            edes = form.cleaned_data.get('eventDetails')
+            booking = Booking.objects.create(sdate=sdate,edate=edate,stime=stime,
+            etime=etime,hallNo=hall,fId=c,eventName=ename,eventDetails=edes)
+            booking.save();
+            return redirect('home')
     value = request.GET.get('value')
-    date = request.GET.get('date')
-    return render(request, 'book.html',{'value': value,'date':date})
+    hall = Hall.objects.get(name=value)
+    frm1 = detail()
 
+    if Hall.objects.filter(name=value).exists():
+        return render(request, 'result.html',{'name':value,
+        'inCharge':str(Hall.objects.only('inCharge').get(name=value).inCharge), 
+        'capacity':str(Hall.objects.only('capacity').get(name=value).capacity), 
+        'no':str(Hall.objects.only('no').get(name=value).no),'form':frm1,'ch':False}          
+        )
+    else:
+        return HttpResponse('<p>no such hall</p>')

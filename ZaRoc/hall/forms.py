@@ -1,10 +1,14 @@
 from django import forms
-from .models import *
 
 class searchbar(forms.Form):
-    searchbar = forms.CharField( max_length=100,label='')
-    class Meta:
-        model = Hall
-        fields =['name']
-class DateForm(forms.Form):
-    date = forms.DateField(input_formats=['%d/%m/%Y'])
+    searchbar = forms.CharField(label='Search', max_length=100)
+
+class detail(forms.Form):
+    sdate = forms.DateField(widget=forms.SelectDateWidget)
+    edate = forms.DateField(widget=forms.SelectDateWidget)
+    stime = forms.TimeField()
+    etime = forms.TimeField()
+    
+class desc(forms.Form):
+    eventName = forms.CharField()
+    eventDetails = forms.CharField(widget=forms.Textarea())

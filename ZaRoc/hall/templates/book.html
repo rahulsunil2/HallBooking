@@ -1,17 +1,23 @@
 {% load staticfiles %}
 <html>
     <head>
-		<title>ZaRoc</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel = "icon" href = "{% static 'images/logo.png' %}" type = "image/x-icon"> 
+        <title>bookings</title>
     </head>
     <body>
-    <h1>
-        {{value}}
-    </h1>
-    <h3>
-        {{date}}
-    </h3>
+        <label>Hall Name and number</label><h2> {{Name}}  [{{number}}] </h2>
+        </br></br>
+        Name :<h3>{{cu}} </h3></label>
+        <form action="{% url 'book' %}" method='POST'>
+            {% csrf_token %}
+            <table>
+                {{ f.as_table }}
+            </table>
+            <input type='submit'>
+        </form>
+        <div>
+            {%if ch %}
+                <h3>Booking confirmed</h3>
+            {% endif %}
+        </div>
     </body>
 </html>
