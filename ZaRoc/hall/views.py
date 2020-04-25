@@ -20,8 +20,9 @@ def home(request):
         form = searchbar()   
         return render(request, 'home.html',{'form': form})
 def result(request):
-    global value,sdate,edate,stime,etime
+    global value,sdate,edate,stime,etime,hall,available
     if 'check' in request.POST: #forms for time
+        hall = Hall.objects.get(name=value)
         frm2 = desc()
         frm = detail(request.POST)
         if frm.is_valid():
@@ -29,13 +30,27 @@ def result(request):
             edate = frm.cleaned_data.get('edate')
             stime = frm.cleaned_data.get('stime')
             etime = frm.cleaned_data.get('etime')
+            if Booking.objects.filter(hallNo=hall):
+                obid = Booking.objects.filter(hallNo=hall) #getting objectid
+                n=0
+                while n<len(obid):
+                    if sdate==obid[n].sdate: 
+                        if stime == obid[n].stime: #same time
+                            return HttpResponse("booking not possible")
+                            break
+                        elif etime > obid[n].stime: #end time is greater than start time of another event
+                            return HttpResponse("booking not possible")
+                            break
+                        elif stime > obid[n].stime and stime < obid[n].etime: #new booking starts b/w a ongoing event
+                            return HttpResponse("booking not possible")
+                            break
+                    n+=1
             return render(request, 'result.html',{'name':value,
             'inCharge':str(Hall.objects.only('inCharge').get(name=value).inCharge), 
-             'capacity':str(Hall.objects.only('capacity').get(name=value).capacity), 
-             'no':str(Hall.objects.only('no').get(name=value).no),'form':frm2,'ch':True})
+            'capacity':str(Hall.objects.only('capacity').get(name=value).capacity), 
+            'no':str(Hall.objects.only('no').get(name=value).no),'form':frm2,'ch':True}) 
              
     elif 'book' in request.POST: #forms for event
-        hall = Hall.objects.get(name=value)
         c= request.user
         n=c.username
         i=c.id 
