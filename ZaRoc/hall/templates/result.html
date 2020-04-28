@@ -1,3 +1,4 @@
+{% load socialaccount %}
 {% load staticfiles %}
 <html>
     <head>
@@ -5,39 +6,34 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel = "icon" href = "{% static 'images/logo.png' %}" type = "image/x-icon"> 
-        <style>body {font-family: Arial, sans-serif;}</style>
-  
-        <!-- jQuery -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-
-        <!-- Fengyuan Chen's Datepicker -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
-
     </head>
     <body>
-        <h1>
-            {{name}}({{no}})
-        </h1>
-        <p>capacity: {{capacity}}</p>
-        <p>incharge: {{inCharge}}</p> 
-        <form action="{% url 'result' %}" method='POST'>
-            {% if ch %}
-                {% csrf_token %}
-                {{ form.sdate }}
-                <input type="submit" name="book" value="BOOK">
-            {% else %}
-                {% csrf_token %}
-                {{ form.edate }}
-                <input type="submit" name="check" value="check availability">
-            {% endif %}
-        </form>
-        <script>
-            $(function () {
-                $("#id_edate").datepicker({
-                format:'dd/mm/yyyy',
-                });
-            });
-        </script>
+        {% if user.is_authenticated %}
+			<h2>Welcome, {{ user.username }} </h2>
+			<form method="post" action="{% url 'account_logout' %}">
+  				{% csrf_token %}
+  				{% if redirect_field_value %}
+    				<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+  				{% endif %}
+  				<button class="button big alt" type="submit">Logout</button>
+			</form>
+	    {% else %}
+			<script>
+    			window.location = "{% url 'signin' %}";
+			</script>
+		{% endif %}
+
+		{% for key, val in halls.items %}
+			{% for k,z in val.items %}
+				{% if k == 'name' %}
+					<h3>name: {{z}} </h3>
+					<h4> Time slots available:</h4>
+				{% else %}
+					{{z.0}}-{{z.1}}
+					<br>
+				{% endif %}
+			{% endfor %}
+		{% endfor %} 
     </body>
 </html>
+
