@@ -11,8 +11,8 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
         <!-- Fengyuan Chen's Datepicker -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
+        {% comment %} <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script> {% endcomment %}
 
     </head>
     <body>
@@ -39,7 +39,10 @@
         <h3>Enter the date</h3>
         <!--form for date  and time -->
         <form action="{% url 'home' %}" method='POST'>
-            {% if ch %}
+            {% csrf_token%}
+            {{form.as_p}}
+            <input type="submit" name="check" value="check availability">
+            {% comment %} {% if ch %}
                 {% csrf_token %}
                 {{ form.edate }}
                 <input type="submit" name="book" value="BOOK">
@@ -47,7 +50,7 @@
                 {% csrf_token %}
                 {{ form.sdate }}
                 <input type="submit" name="check" value="check availability">
-            {% endif %}
+            {% endif %} {% endcomment %}
         </form>
         <script>
             $(function () {
