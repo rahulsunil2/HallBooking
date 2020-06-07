@@ -70,7 +70,7 @@ def home(request):
     if 'check' in request.POST: #get time and redirect to next page
         dateForm = detail(request.POST)
         print(dateForm['sdate'].value())
-        
+        print(dateForm.errors)
         if dateForm.is_valid():
             Sdate = dateForm['sdate'].value()
             Stime = dateForm['stime'].value()
