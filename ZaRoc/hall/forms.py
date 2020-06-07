@@ -5,10 +5,10 @@ class searchbar(forms.Form):
     searchbar = forms.CharField(label='Search', max_length=100)
 
 class detail(forms.Form):
-    sdate = forms.DateField(label='start date ',input_formats= ['%Y-%m-%d'] ,widget=forms.widgets.DateInput(attrs={'type':'date'}))
-    stime = forms.TimeField(label='start time',input_formats= ['%H:%M'] ,widget=forms.widgets.TimeInput(attrs={'type':'time'}))
-    edate = forms.DateField(label='end date',input_formats= ['%Y-%m-%d'] ,widget=forms.widgets.DateInput(attrs={'type':'date'}))
-    etime = forms.TimeField(label='end time',input_formats= ['%H:%M'] ,widget=forms.widgets.TimeInput(attrs={'type':'time'}))
+    sdate = forms.DateTimeField(label='start date :',input_formats=['%d/%m/%Y %H:%M'])
+    # stime = forms.TimeField(label='start time',input_formats= ['%H:%M'] ,widget=forms.widgets.TimeInput(attrs={'type':'time'}))
+    edate = forms.DateTimeField(label='end date   :',input_formats=['%d/%m/%Y %H:%M'])
+    # etime = forms.TimeField(label='end time',input_formats= ['%H:%M'] ,widget=forms.widgets.TimeInput(attrs={'type':'time'}))
     # stime = forms.TimeField()
     # etime = forms.TimeField()
     

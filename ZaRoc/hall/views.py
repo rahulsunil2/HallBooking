@@ -69,15 +69,11 @@ def home(request):
 
     if 'check' in request.POST: #get time and redirect to next page
         dateForm = detail(request.POST)
-        print(dateForm['sdate'].value())
-        print(dateForm.errors)
         if dateForm.is_valid():
             Sdate = dateForm['sdate'].value()
-            Stime = dateForm['stime'].value()
             Edate = dateForm['edate'].value()
-            Etime = dateForm['etime'].value()
-            c="\n{} \n{} \n{} \n{}\n"
-            print(c.format(Sdate,Stime,Edate,Etime))
+            c="\n{} \n{}\n"
+            print(c.format(Sdate,Edate))
             print("hey")
             return HttpResponseRedirect('/result/?initDate=%s' %(dateForm.cleaned_data['sdate'],))
 
