@@ -5,6 +5,7 @@ import datetime
 from .forms import *
 from .models import Hall,Booking
 from django.contrib.auth.models import User
+import re
 # Create your views here.
 def signin(request):
     return render(request, 'signin.html') 
@@ -70,11 +71,10 @@ def home(request):
     if 'check' in request.POST: #get time and redirect to next page
         dateForm = detail(request.POST)
         if dateForm.is_valid():
-            Sdate = dateForm['sdate'].value()
-            Edate = dateForm['edate'].value()
+            Sdate = dateForm.cleaned_data.get('sdate')
+            Edate = dateForm.cleaned_data.get('edate')
             c="\n{} \n{}\n"
             print(c.format(Sdate,Edate))
-            print("hey")
             return HttpResponseRedirect('/result/?initDate=%s' %(dateForm.cleaned_data['sdate'],))
 
     return render(request,'home.html',{'form':detail()})

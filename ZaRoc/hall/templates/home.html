@@ -38,7 +38,7 @@
         <br><br>
         <h3>Enter the date</h3>
         <!--form for date  and time -->
-        <form action="{% url 'home' %}" method='post'>
+        <form action="{% url 'home' %}" method='post' autocomplete="off">
             {% csrf_token%}
             {{form.as_p}}
             <input type="submit" name="check" value="check availability">
