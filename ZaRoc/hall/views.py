@@ -66,7 +66,7 @@ def result(request):
 
 def home(request):
 
-    global value,sdate,edate,stime,etime,hall,available
+    #global value,sdate,edate,stime,etime,hall,available
 
     if 'check' in request.POST: #get time and redirect to next page
         dateForm = detail(request.POST)
@@ -75,7 +75,32 @@ def home(request):
             Edate = dateForm.cleaned_data.get('edate')
             c="\n{} \n{}\n"
             print(c.format(Sdate,Edate))
-            return HttpResponseRedirect('/result/?initDate=%s' %(dateForm.cleaned_data['sdate'],))
+            obid = Booking.objects.all() #getting objectid
+            hob = Hall.objects.all() #getting hall objects
+            a = []
+            for i in hob:
+                for j in obid:
+                    print(i)
+                    print(j)
+                    print(j.sTime.date())
+                    print(Sdate.date())
+                    print(j.sTime.time())
+                    print("@@@@@@@@@@@")
+                    if j.hallNo.no == i.no and j.sTime.date() == Sdate.date(): 
+                        print(j.sTime.time())
+                        print(Sdate.time())
+                        print("......................")
+                        if j.sTime.time() == Sdate.time(): #same time
+                            print("hbfsljhf")
+                            return HttpResponse("booking not possible")
+                            break
+                        # elif etime > obid[n].stime: #end time is greater than start time of another event
+                        #     return HttpResponse("booking not possible")
+                        #     break
+                        # elif stime > obid[n].stime and stime < obid[n].etime: #new booking starts b/w a ongoing event
+                        #     return HttpResponse("booking not possible")
+                        #     break
+            #return HttpResponseRedirect('/result/?initDate=%s' %(dateForm.cleaned_data['sdate'],))
 
     return render(request,'home.html',{'form':detail()})
 
