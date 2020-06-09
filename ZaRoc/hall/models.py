@@ -13,8 +13,8 @@ class Hall(models.Model):
 
 class Booking(models.Model):
     bId = models.AutoField(primary_key=True)
-    sTime = models.DateTimeField('Start Time')
-    eTime = models.DateTimeField('End Time')
+    sTime = models.DateTimeField(null=True, blank=True)
+    eTime = models.DateTimeField(null=True, blank=True)
     # sdate = models.DateField(null=True, blank=True)
     # edate = models.DateField( null=True , blank=True)
     # stime = models.TimeField( null=True , blank=True) 
