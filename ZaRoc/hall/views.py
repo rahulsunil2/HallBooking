@@ -53,20 +53,11 @@ def result(request):
     print(halldict)
     return render(request, 'result.html',{'halls':halldict})
 
-    # #if this is a POST request we need to process the form data
-    # if request.method == 'POST':
-    #     # create a form instance and populate it with data from the request:
-    #     form = searchbar(request.POST)
-    #     # check whether it's valid:
-    #     if form.is_valid():
-    #         return HttpResponseRedirect('/result/?value=%s' %(form.cleaned_data['searchbar'],))
-    # # if a GET (or any other method) we'll create a blank form
-    # else: 
 
 
 def home(request):
 
-    #global value,sdate,edate,stime,etime,hall,available
+    #global value,sdate,edate,stime,etime,haxxxxxxll,available
 
     if 'check' in request.POST: #get time and redirect to next page
         dateForm = detail(request.POST)
@@ -78,82 +69,71 @@ def home(request):
             obid = Booking.objects.all() #getting objectid
             hob = Hall.objects.all() #getting hall objects
             a = []
+            
             for i in hob:
+                print(i )
                 for j in obid:
-                    print(i)
+                    n = 0
                     print(j)
-                    print(j.sTime.date())
-                    print(Sdate.date())
-                    print(j.sTime.time())
-                    print("@@@@@@@@@@@")
                     if j.hallNo.no == i.no and j.sTime.date() == Sdate.date(): 
-                        print(j.sTime.time())
-                        print(Sdate.time())
-                        print("......................")
-                        if j.sTime.time() == Sdate.time(): #same time
-                            print("hbfsljhf")
-                            return HttpResponse("booking not possible")
+                        n = 1
+                        chkResult = sartTimeCheck(j,Sdate.time(),Edate.time())
+                        if chkResult == 0:
+                            print(str(j) +"not possible")
                             break
-                        # elif etime > obid[n].stime: #end time is greater than start time of another event
-                        #     return HttpResponse("booking not possible")
-                        #     break
-                        # elif stime > obid[n].stime and stime < obid[n].etime: #new booking starts b/w a ongoing event
-                        #     return HttpResponse("booking not possible")
-                        #     break
+                        else:
+                            if j.eTime.date() == Edate.date(): #same end date
+                                endChkResult = endTimeCheck(j,Edate.time())
+                                if endChkResult == 0:
+                                    print(str(j) + "not possible")
+                                    break
+                                else:
+                                    print(str(j) + " possible")
+                                    a.append(i.name)
+                    else:
+
+                        #no hall booking at the same date but need to check end date
+                        for x in obid:
+                            if x.hallNo.no == i.no and x.eTime.date() == Edate.date():
+                                n = 1
+                                Rslt = endTimeCheck(x,Edate.time())
+                                if Rslt == 0:
+                                    print(str(j) + "not possible")
+                                else:
+                                    print(str(j) + " possible")
+                                    a.append(i.name)
+                if n == 0:
+                    a.append(i.name)
+            if len(a) != 0:
+                return HttpResponse(a)
+            else:
+                return HttpResponse("No Halls Available")
+
+
+
+
+
             #return HttpResponseRedirect('/result/?initDate=%s' %(dateForm.cleaned_data['sdate'],))
 
     return render(request,'home.html',{'form':detail()})
 
-    # if 'check' in request.POST: #forms for time
-    #     hall = Hall.objects.get(name=value)
-    #     frm2 = desc()
-    #     frm = detail(request.POST)
-    #     if frm.is_valid():
-    #         sdate = frm.cleaned_data.get('sdate')
-    #         edate = frm.cleaned_data.get('edate')
-    #         stime = frm.cleaned_data.get('stime')
-    #         etime = frm.cleaned_data.get('etime')
-    #         if Booking.objects.filter(hallNo=hall):
-    #             obid = Booking.objects.filter(hallNo=hall) #getting objectid
-    #             n=0
-    #             while n<len(obid):
-    #                 if sdate==obid[n].sdate: 
-    #                     if stime == obid[n].stime: #same time
-    #                         return HttpResponse("booking not possible")
-    #                         break
-    #                     elif etime > obid[n].stime: #end time is greater than start time of another event
-    #                         return HttpResponse("booking not possible")
-    #                         break
-    #                     elif stime > obid[n].stime and stime < obid[n].etime: #new booking starts b/w a ongoing event
-    #                         return HttpResponse("booking not possible")
-    #                         break
-    #                 n+=1
-    #         return render(request, 'result.html',{'name':value,
-    #         'inCharge':str(Hall.objects.only('inCharge').get(name=value).inCharge), 
-    #         'capacity':str(Hall.objects.only('capacity').get(name=value).capacity), 
-    #         'no':str(Hall.objects.only('no').get(name=value).no),'form':frm2,'ch':True}) 
-             
-    # elif 'book' in request.POST: #forms for event
-    #     c= request.user
-    #     n=c.username
-    #     i=c.id 
-    #     form = desc(request.POST)   
-    #     if form.is_valid():
-    #         ename = form.cleaned_data.get('eventName')
-    #         edes = form.cleaned_data.get('eventDetails')
-    #         booking = Booking.objects.create(sdate=sdate,edate=edate,stime=stime,
-    #         etime=etime,hallNo=hall,fId=c,eventName=ename,eventDetails=edes)
-    #         booking.save();
-    #         return redirect('home')
+def sartTimeCheck(bookId,Time,Time2):
+    #checking for same start time or new booking starts b/w a ongoing event
 
-    # value = request.GET.get('value')
-    # hall = Hall.objects.get(name=value)
-    # frm1 = detail()
+    if bookId.sTime.time() == Time or (Time > bookId.sTime.time() and Time < bookId.eTime.time()): 
+        return 0
+    else:
+        return endTimeCheck(bookId,Time2)
 
-    # if Hall.objects.filter(name=value).exists():
-    #     return render(request, 'result.html',{'name':value,
-    #     'inCharge':str(Hall.objects.only('inCharge').get(name=value).inCharge), 
-    #     'capacity':str(Hall.objects.only('capacity').get(name=value).capacity), 
-    #     'no':str(Hall.objects.only('no').get(name=value).no),'form':frm1,'ch':False} )
-    # else:
-    #     return HttpResponse('<p>no such hall</p>')
+def endTimeCheck(bookId,Time):
+    #same end time if end time of the booking is b/w the booking
+
+    if Time > bookId.sTime.time() : 
+        #or (Time > bookId.sTime.time() and Time < bookId.eTime.time())
+
+        return 0
+    else : 
+        return 1
+
+
+   
