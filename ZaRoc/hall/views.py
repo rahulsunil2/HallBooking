@@ -23,10 +23,13 @@ def result(request):
     request.session['edate']=request.GET.get('edate')[:-10]
     sdate = datetime.datetime.strptime(request.GET.get('sdate')[:-10], '%Y-%m-%d %H:%M')
     edate = datetime.datetime.strptime(request.GET.get('edate')[:-10], '%Y-%m-%d %H:%M')
-    avail_halls=list(Hall.objects.all())
-    for i in avail_halls:
+    halls=list(Hall.objects.all())
+    avail_halls=[]
+    for i in halls:
         if Booking.objects.filter(Q(hallNo=i) & ((Q(sTime__lte=sdate) & Q(eTime__gte=sdate)) | (Q(sTime__lte=edate) & Q(eTime__gte=edate)) | (Q(sTime__gte=sdate) & Q(sTime__lte=edate)) | (Q(eTime__gte=sdate) & Q(eTime__lte=edate)))).exists():
-            avail_halls.remove(i)
+            pass
+        else:
+            avail_halls.append(i)
     if len(avail_halls)==0:
         return render(request,'home.html',{'form':detail(),'avail':True})
     # request.session['avail_halls']=avail_halls
