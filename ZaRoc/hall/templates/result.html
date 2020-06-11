@@ -9,31 +9,19 @@
     </head>
     <body>
         {% if user.is_authenticated %}
-			<h2>Welcome, {{ user.username }} </h2>
-			<form method="post" action="{% url 'account_logout' %}">
-  				{% csrf_token %}
-  				{% if redirect_field_value %}
-    				<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-  				{% endif %}
-  				<button class="button big alt" type="submit">Logout</button>
-			</form>
+			{% for hall in avail_halls %}
+				<h1>
+					{{hall.name}}({{hall.no}})
+				
+				</h1>
+				<p>capacity: {{hall.capacity}}</p>
+				<p>incharge: {{hall.inCharge}}</p> 
+			{% endfor %}
 	    {% else %}
 			<script>
     			window.location = "{% url 'signin' %}";
 			</script>
 		{% endif %}
-
-		{% for key, val in halls.items %}
-			{% for k,z in val.items %}
-				{% if k == 'name' %}
-					<h3>name: {{z}} </h3>
-					<h4> Time slots available:</h4>
-				{% else %}
-					{{z.0}}-{{z.1}}
-					<br>
-				{% endif %}
-			{% endfor %}
-		{% endfor %} 
     </body>
 </html>
 

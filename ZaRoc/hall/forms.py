@@ -13,6 +13,6 @@ class detail(forms.Form):
     # etime = forms.TimeField()
     
 class desc(forms.Form):
-    eventName = forms.CharField()
-    eventDetails = forms.CharField(widget=forms.Textarea())
+    eventName = forms.CharField(label='name', max_length=100)
+    eventDetails = forms.CharField(label='details',widget=forms.Textarea)
  
