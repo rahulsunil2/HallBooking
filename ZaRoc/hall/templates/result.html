@@ -1,3 +1,4 @@
+{% load socialaccount %}
 {% load staticfiles %}
 <html>
     <head>
@@ -5,34 +6,22 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel = "icon" href = "{% static 'images/logo.png' %}" type = "image/x-icon"> 
-        <style>body {font-family: Arial, sans-serif;}</style>
-  
-        <!-- jQuery -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-
-        <!-- Fengyuan Chen's Datepicker -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
-
     </head>
     <body>
-        <h1>
-            {{details.name}}({{details.no}})
-            
-        </h1>
-        <p>capacity: {{details.capacity}}</p>
-        <p>incharge: {{details.inCharge}}</p> 
-		<form action="" method="post" autocomplete="off">
-            {% csrf_token %}
-            Date: {{ form.date }}
-            <input type="submit" value="BOOK">
-        </form>
-        <script>
-            $(function () {
-                $("#id_date").datepicker({
-                format:'dd/mm/yyyy',
-                });
-            });
-        </script>
+        {% if user.is_authenticated %}
+			{% for hall in avail_halls %}
+				<h1>
+					{{hall.name}}({{hall.no}})
+				
+				</h1>
+				<p>capacity: {{hall.capacity}}</p>
+				<p>incharge: {{hall.inCharge}}</p> 
+			{% endfor %}
+	    {% else %}
+			<script>
+    			window.location = "{% url 'signin' %}";
+			</script>
+		{% endif %}
     </body>
 </html>
+

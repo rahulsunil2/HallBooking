@@ -1,4 +1,3 @@
-{% load socialaccount %}
 {% load staticfiles %}
 <html>
     <head>
@@ -6,8 +5,22 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel = "icon" href = "{% static 'images/logo.png' %}" type = "image/x-icon"> 
+        <style>body {font-family: Arial, sans-serif;}</style>
+  
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+        <!-- XDSoft DateTimePicker -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+
     </head>
     <body>
+        <!--<h1>
+            {{name}}({{no}})
+        </h1>
+        <p>capacity: {{capacity}}</p>
+        <p>incharge: {{inCharge}}</p> -->
         {% if user.is_authenticated %}
 			<h2>Welcome, {{ user.username }} </h2>
 			<form method="post" action="{% url 'account_logout' %}">
@@ -17,15 +30,29 @@
   				{% endif %}
   				<button class="button big alt" type="submit">Logout</button>
 			</form>
-			<form action="" method="post">
-            	{% csrf_token %}
-            	{{ form }}
-            	<input type="submit" value="Search">
-        	</form>
         {% else %}
 			<script>
     			window.location = "{% url 'signin' %}";
 			</script>
 		{% endif %}
+        <br><br>
+        <h3>Enter the date</h3>
+        <!--form for date  and time -->
+        <form action="{% url 'home' %}" method='post' autocomplete="off">
+            {% csrf_token%}
+            {{form.as_p}}
+            <input type="submit" name="check" value="check availability">
+        </form>
+        {% if avail %}
+            <p>(no halls are available on that time slot)</p>
+        {% elif book %}
+            <p>(Hall was booked)</p>
+        {% endif %}
+        <script>
+            $(function () {
+            $("#id_sdate").datetimepicker({format: 'd/m/Y H:i',});
+            $("#id_edate").datetimepicker({format: 'd/m/Y H:i',});
+        });
+        </script>
     </body>
 </html>
