@@ -15,8 +15,33 @@ def home(request):
         dateForm = detail(request.POST)
         if dateForm.is_valid():
             return HttpResponseRedirect('/result/?sdate=%s&edate=%s' %(dateForm.cleaned_data['sdate'],dateForm.cleaned_data['edate']))
+    if 'hidden_field' in request.POST: #to booked halls
+        return HttpResponseRedirect('/booked/')
 
-    return render(request,'home.html',{'form':detail(),'avail':False,'book':False})
+
+    return render(request,'home.html',{'form':detail(),'forms':hidden()})
+
+def booked(request):
+    usrid = request.user.id
+    hallBookings = Booking.objects.filter(fId_id = usrid)
+    print(hallBookings)
+    if 'hidden_field' in request.POST: #cancel halls
+        bid = hidden(request.POST)
+        if bid.is_valid():
+            bookId = bid.cleaned_data['hidden_field']
+            obj = Booking.objects.filter(bId=bookId)
+            obj.delete()
+            hallBookings = Booking.objects.filter(fId_id = usrid)
+            return render(request,'booked.html',{"halls":hallBookings,'form':hidden()})
+        
+    usrid = request.user.id
+    hallBookings = Booking.objects.filter(fId_id = usrid)
+    print(hallBookings)
+    return render(request,'booked.html',{"halls":hallBookings,'form':hidden()})
+
+        
+    
+
 
 def result(request):
     request.session['sdate']=request.GET.get('sdate')[:-10]
@@ -32,8 +57,24 @@ def result(request):
             avail_halls.append(i)
     if len(avail_halls)==0:
         return render(request,'home.html',{'form':detail(),'avail':True})
-    # request.session['avail_halls']=avail_halls
-    return render(request,'result.html',{"avail_halls":avail_halls})
+    if 'hidden_field' in request.POST: #get time and redirect to next page
+        oid = hidden(request.POST)
+        if oid.is_valid():
+            request.session['obj_id']=oid.cleaned_data['hidden_field']
+            return render(request, 'book.html',{'form':desc()})
+    return render(request,'result.html',{'form':hidden(),"avail_halls":avail_halls})
 
 def book(request):
-    return render(request,'home.html',{'form':detail(),'avail':False,'book':True})
+    hall= Hall.objects.get(pk=int(request.session['obj_id']))
+    sdate = datetime.datetime.strptime(request.session['sdate'], '%Y-%m-%d %H:%M')
+    edate = datetime.datetime.strptime(request.session['edate'], '%Y-%m-%d %H:%M')
+    userr = User.objects.get(username=request.user) 
+    if 'book' in request.POST: #get time and redirect to next page
+        eve_desc = desc(request.POST)
+        if eve_desc.is_valid():
+
+            book = Booking.objects.create(sTime=sdate,eTime=edate,fId=userr,hallNo=hall,eventName=eve_desc.cleaned_data['eventName'],eventDetails=eve_desc.cleaned_data['eventDetails'],)
+            book.save()
+            return HttpResponseRedirect('/home/')
+
+    return render(request, 'book.html',{'form':desc()})

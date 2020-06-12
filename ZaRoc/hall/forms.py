@@ -6,12 +6,11 @@ class searchbar(forms.Form):
 
 class detail(forms.Form):
     sdate = forms.DateTimeField(label='start date :',input_formats=['%d/%m/%Y %H:%M'])
-    # stime = forms.TimeField(label='start time',input_formats= ['%H:%M'] ,widget=forms.widgets.TimeInput(attrs={'type':'time'}))
     edate = forms.DateTimeField(label='end date   :',input_formats=['%d/%m/%Y %H:%M'])
-    # etime = forms.TimeField(label='end time',input_formats= ['%H:%M'] ,widget=forms.widgets.TimeInput(attrs={'type':'time'}))
-    # stime = forms.TimeField()
-    # etime = forms.TimeField()
-    
+
+class hidden(forms.Form):
+    hidden_field = forms.CharField(widget=forms.HiddenInput()) 
+      
 class desc(forms.Form):
     eventName = forms.CharField(label='name', max_length=100)
     eventDetails = forms.CharField(label='details',widget=forms.Textarea)
