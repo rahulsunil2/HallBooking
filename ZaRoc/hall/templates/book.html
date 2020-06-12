@@ -1,23 +1,24 @@
 {% load staticfiles %}
 <html>
     <head>
-        <title>bookings</title>
+		<title>ZaRoc</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel = "icon" href = "{% static 'images/logo.png' %}" type = "image/x-icon"> 
+        <style>body {font-family: Arial, sans-serif;}</style>
+  
     </head>
     <body>
-        <label>Hall Name and number</label><h2> {{Name}}  [{{number}}] </h2>
-        </br></br>
-        Name :<h3>{{cu}} </h3></label>
-        <form action="{% url 'book' %}" method='POST'>
-            {% csrf_token %}
-            <table>
-                {{ f.as_table }}
-            </table>
-            <input type='submit'>
-        </form>
-        <div>
-            {%if ch %}
-                <h3>Booking confirmed</h3>
-            {% endif %}
-        </div>
+        {% if user.is_authenticated %}
+            <form action="{% url 'book' %}" method='post' autocomplete="off">
+                {% csrf_token%}
+                {{form.as_p}}
+                <input type="submit" name="book" value="submit&book">
+            </form>
+        {% else %}
+			<script>
+    			window.location = "{% url 'signin' %}";
+			</script>
+		{% endif %}
     </body>
 </html>

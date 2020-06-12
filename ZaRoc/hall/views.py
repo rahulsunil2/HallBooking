@@ -32,8 +32,24 @@ def result(request):
             avail_halls.append(i)
     if len(avail_halls)==0:
         return render(request,'home.html',{'form':detail(),'avail':True})
-    # request.session['avail_halls']=avail_halls
-    return render(request,'result.html',{"avail_halls":avail_halls})
+    if 'hidden_field' in request.POST: #get time and redirect to next page
+        oid = hidden(request.POST)
+        if oid.is_valid():
+            request.session['obj_id']=oid.cleaned_data['hidden_field']
+            return render(request, 'book.html',{'form':desc()})
+    return render(request,'result.html',{'form':hidden(),"avail_halls":avail_halls})
 
 def book(request):
-    return render(request,'home.html',{'form':detail(),'avail':False,'book':True})
+    hall= Hall.objects.get(pk=int(request.session['obj_id']))
+    sdate = datetime.datetime.strptime(request.session['sdate'], '%Y-%m-%d %H:%M')
+    edate = datetime.datetime.strptime(request.session['edate'], '%Y-%m-%d %H:%M')
+    userr = User.objects.get(username=request.user) 
+    if 'book' in request.POST: #get time and redirect to next page
+        eve_desc = desc(request.POST)
+        if eve_desc.is_valid():
+
+            book = Booking.objects.create(sTime=sdate,eTime=edate,fId=userr,hallNo=hall,eventName=eve_desc.cleaned_data['eventName'],eventDetails=eve_desc.cleaned_data['eventDetails'],)
+            book.save()
+            return render(request,'home.html',{'form':detail(),'avail':False,'book':True})
+
+    return render(request, 'book.html',{'form':desc()})

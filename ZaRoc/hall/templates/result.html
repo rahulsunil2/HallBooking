@@ -1,4 +1,3 @@
-{% load socialaccount %}
 {% load staticfiles %}
 <html>
     <head>
@@ -16,6 +15,12 @@
 				</h1>
 				<p>capacity: {{hall.capacity}}</p>
 				<p>incharge: {{hall.inCharge}}</p> 
+				<form method="POST">
+					{% csrf_token %}
+					{{form}}
+					<input type="hidden" name="hidden_field" value="{{ hall.id }}">
+					<button type="submit">BOOK</button>
+				</form>
 			{% endfor %}
 	    {% else %}
 			<script>
