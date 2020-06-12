@@ -15,8 +15,33 @@ def home(request):
         dateForm = detail(request.POST)
         if dateForm.is_valid():
             return HttpResponseRedirect('/result/?sdate=%s&edate=%s' %(dateForm.cleaned_data['sdate'],dateForm.cleaned_data['edate']))
+    if 'hidden_field' in request.POST: #to booked halls
+        return HttpResponseRedirect('/booked/')
 
-    return render(request,'home.html',{'form':detail(),'avail':False,'book':False})
+
+    return render(request,'home.html',{'form':detail(),'forms':hidden()})
+
+def booked(request):
+    usrid = request.user.id
+    hallBookings = Booking.objects.filter(fId_id = usrid)
+    print(hallBookings)
+    if 'hidden_field' in request.POST: #cancel halls
+        bid = hidden(request.POST)
+        if bid.is_valid():
+            bookId = bid.cleaned_data['hidden_field']
+            obj = Booking.objects.filter(bId=bookId)
+            obj.delete()
+            hallBookings = Booking.objects.filter(fId_id = usrid)
+            return render(request,'booked.html',{"halls":hallBookings,'form':hidden()})
+        
+    usrid = request.user.id
+    hallBookings = Booking.objects.filter(fId_id = usrid)
+    print(hallBookings)
+    return render(request,'booked.html',{"halls":hallBookings,'form':hidden()})
+
+        
+    
+
 
 def result(request):
     request.session['sdate']=request.GET.get('sdate')[:-10]
@@ -50,6 +75,6 @@ def book(request):
 
             book = Booking.objects.create(sTime=sdate,eTime=edate,fId=userr,hallNo=hall,eventName=eve_desc.cleaned_data['eventName'],eventDetails=eve_desc.cleaned_data['eventDetails'],)
             book.save()
-            return render(request,'home.html',{'form':detail(),'avail':False,'book':True})
+            return HttpResponseRedirect('/home/')
 
     return render(request, 'book.html',{'form':desc()})

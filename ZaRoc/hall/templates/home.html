@@ -43,11 +43,12 @@
             {{form.as_p}}
             <input type="submit" name="check" value="check availability">
         </form>
-        {% if avail %}
-            <p>(no halls are available on that time slot)</p>
-        {% elif book %}
-            <p>(Hall was booked)</p>
-        {% endif %}
+        <form method="POST">
+            {% csrf_token %}
+            {{forms}}
+            <input type="hidden" name="hidden_field" value="booked">
+            <button type="submit">Booked Halls</button>
+        </form>
         <script>
             $(function () {
             $("#id_sdate").datetimepicker({format: 'd/m/Y H:i',});

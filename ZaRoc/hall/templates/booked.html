@@ -1,0 +1,48 @@
+{% load staticfiles %}
+<html>
+    <head>
+		<title>ZaRoc</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel = "icon" href = "{% static 'images/logo.png' %}" type = "image/x-icon"> 
+    </head>
+    <body>
+        {% if user.is_authenticated %}
+            {% if halls %}
+                <h2>Your Bookings</h2>
+                <table>
+                    <tr>
+                        <th>Booking Id </th>
+                        <th>Event name</th>
+                        <th>Start Date and Time</th>
+                        <th>End Date and Time</th>
+                        <th>Event Details</th>
+                        
+                    </tr>
+                {% for hall in halls %}
+                     <tr>
+                        <td>{{hall.bId}}</td>
+                        <td>{{hall.eventName}}</td>
+                        <td>{{hall.sTime}}</td>
+                        <td>{{hall.eTime}}</td>
+                        <td>{{hall.eventDetails}}</td>
+                        <td>
+                            <form method="POST">
+                                {% csrf_token %}
+                                {{form}}
+                                <input type="hidden" name="hidden_field" value="{{ hall.bId }}">
+                                <button type="submit">Cancel Booking</button>
+                            </form>
+                        </td>
+                    </tr>
+			    {% endfor %}
+            {% else %}
+                <h2> You have no Bookings</h2>
+            {% endif %}
+	    {% else %}
+			<script>
+    			window.location = "{% url 'signin' %}";
+			</script>
+		{% endif %}
+    </body>
+</html>
