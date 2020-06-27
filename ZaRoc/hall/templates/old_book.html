@@ -1,0 +1,46 @@
+{% load staticfiles %}
+<html>
+    <head>
+		<title>ZaRoc</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel = "icon" href = "{% static 'images/logo.png' %}" type = "image/x-icon"> 
+        <style>body {font-family: Arial, sans-serif;}</style>
+    </head>
+
+    <body>
+        <H1> BOOK.html </H1>
+
+        {% if user.is_authenticated %}
+
+
+            <!-- logout -->
+			<h2>Welcome, {{ user.username }} </h2>
+			<form method="post" action="{% url 'account_logout' %}"> {% csrf_token %}
+				{% if redirect_field_value %}
+					<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+				{% endif %}
+				<button class="button big alt" type="submit">Logout</button>
+			</form>
+            <!------------>
+            
+            <p>{{sdate}}</p>
+            <p>{{edate}}</p>
+            <h1> {{hall.name}}({{hall.no}}) </h1>
+            <p>capacity: {{hall.capacity}}</p>
+            <p>incharge: {{hall.inCharge}}</p> 
+
+            <!-- form for title & desc --->
+            <form action="{% url 'book' %}" method='post' autocomplete="off">    {% csrf_token%}
+                {{desc_form.as_p}}
+                <input type="submit" name="book" value="submit&book">
+            </form>
+            <!---------------------------->
+
+        {% else %}
+			<script>
+    			window.location = "{% url 'signin' %}";
+			</script>
+		{% endif %}
+    </body>
+</html>

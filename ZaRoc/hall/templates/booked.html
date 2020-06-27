@@ -29,7 +29,7 @@
                         <td>
                             <form method="POST">
                                 {% csrf_token %}
-                                {{form}}
+                                {{hidden_form}}
                                 <input type="hidden" name="hidden_field" value="{{ hall.bId }}">
                                 <button type="submit">Cancel Booking</button>
                             </form>
