@@ -31,8 +31,8 @@ def home(request):
         if dateForm.is_valid():
             return HttpResponseRedirect('/result/?sdate=%s&edate=%s' %(dateForm.cleaned_data['sdate'],dateForm.cleaned_data['edate']))
     usrid = request.user.id
-    #hallBookings = Booking.objects.filter(Q(fId_id = usrid) & Q(eTime__gte=datetime.datetime.now()))
-    hallBookings = Booking.objects.filter(Q(fId_id = usrid))
+    hallBookings = Booking.objects.filter(Q(fId_id = usrid) & Q(eTime__gte=datetime.datetime.now()))
+    #hallBookings = Booking.objects.filter(Q(fId_id = usrid))
     if 'hidden_field' in request.POST: #cancel halls
         bid = hidden(request.POST)
         if bid.is_valid():
@@ -84,8 +84,8 @@ def book(request):
 def hall(request):
     t_exist=True
     h_info=Hall.objects.get(pk=int(request.session['obj_id']))
-    #b_info=Booking.objects.filter(Q(hallNo=h_info) & Q(eTime__gte=datetime.datetime.now()))
-    b_info=Booking.objects.filter(Q(hallNo=h_info))
+    b_info=Booking.objects.filter(Q(hallNo=h_info) & Q(eTime__gte=datetime.datetime.now()))
+    #b_info=Booking.objects.filter(Q(hallNo=h_info))
     print(b_info)
     if 'Tsearch' in request.POST: #get time and redirect to next page
         dateForm = detail(request.POST)
