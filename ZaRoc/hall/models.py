@@ -8,6 +8,8 @@ class Hall(models.Model):
     name = models.CharField(max_length=60)
     capacity = models.DecimalField(max_digits=3, decimal_places=0)
     inCharge = models.ForeignKey(User, models.PROTECT, default=1234)
+    def __str__(self):
+        return str(self.name)
     class Meta:
         verbose_name_plural = "Halls"
 
@@ -19,6 +21,5 @@ class Booking(models.Model):
     fId = models.ForeignKey(User, models.SET_NULL, null=True)
     eventName = models.CharField(max_length=60)
     eventDetails = models.TextField('Event Details', blank=True)
-
     class Meta:
         verbose_name_plural = "Bookings"
