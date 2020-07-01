@@ -47,3 +47,28 @@
   background-color: rgba(0,0,0,0.44);
   max-width: 500px;
 }
+
+.booked-table {
+  margin: 100px 70px 50px 70px;
+  /*font: white;*/
+  color: rgb(255,255,257);
+}
+
+.AvailContainer {
+  border-radius: 5px;
+  padding: 30px 25px;
+  background-color: rgba(0,0,0,0.44);
+}
+
+.details-table {
+  color: rgb(255,255,257);
+  border-radius: 5px;
+  padding: 30px 25px;
+  background-color: rgba(0,0,0,0.44);
+  max-width: 500px;
+  position: relative;
+  align-self: center;
+  margin: 0 auto;
+  margin-bottom: 2%;
+  margin-top: 3%;
+}

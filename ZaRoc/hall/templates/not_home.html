@@ -1,10 +1,8 @@
 {% load staticfiles %}
-{% load widget_tweaks %}
+<html>
 
-<!DOCTYPE html>
-<html lang="en" >
 <head>
-  <title>ZaRoc</title>
+    <title>ZaRoc</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
@@ -39,12 +37,13 @@
     <link rel="stylesheet" href="{% static 'css/Footer-Basic.css'%}">
     <link rel="stylesheet" href="{% static 'css/Navigation-with-Button.css'%}">
     
-    {% comment %} <link rel="stylesheet" href="{% static 'css/untitled.css'%}"> {% endcomment %}
-    <link rel="stylesheet" href="{%  static 'css/style.css'%}">
+    <link rel="stylesheet" href="{% static 'css/untitled.css'%}">
+    <link rel="stylesheet" href="{% static 'css/home.cs'%}s">
 
 </head>
+
 <body>
-{% if user.is_authenticated %}
+    {% if user.is_authenticated %}
         <!-- Start: Navigation with Button -->
         <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
             <div class="container"><a class="navbar-brand" href="/home">ZaRoc</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
@@ -60,62 +59,60 @@
 							{% if redirect_field_value %}
 								<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
 							{% endif %}
-                            <a href="javascript:$('#logout_form').submit();" class="btn action-button" style="background-color: #2e2a5f;" type="submit">Logout</a>
+                            <a href="javascript:$('#logout_form').submit();" class="btn action-button" style="background-color: #0051ba;" type="submit">Logout</a>
                         </form>
 					</span>
                 </div>
             </div>
         </nav>
         <!-- End: Navigation with Button -->
-        <!-- partial:index.partial.html -->
-        <div class="wrapper">
-
-            <!-- back thing -->
-            <div class="background">
-                <div class="content invisible">
-                    <h2>Book By Time</h2>
-                    <p>Have an event with fixed Time ?</p>
-                    <button id="left-button">GO</button>
-                </div>
-                <div class="content visible">
-                    <h2>Book By Hall</h2>
-                    <p>Have a particular hall in mind ?</p>
-                    <button id="right-button">GO</button>
-                </div>
+        <div class="cont">
+            <div class="form sign-in">
+                <h2>Hall Booking</h2>
+                <label>
+                    <span>From : </span>
+                    <input type="date" />
+                </label>
+                <label>
+                    <span>To : </span>
+                    <input type="date" />
+                </label>
+                <button type="button" class="submit">Search Halls</button>
             </div>
 
-            <!-- front thing -->
-            <div class="foreground">
-            
-                <div class="content visible">
-                    <h2>Book By Time</h2>
-                    <form id="login" action="{% url 'home' %}" method='post' autocomplete="off"> {% csrf_token%}
-                        
-                        <label for="login-email">From : </label>
-                        {% render_field se_form.sdate placeholder="dd/mm/yyyy hh:mm" %}
-                        {% comment %} <input type="date" id="login-email" name="email" placeholder="From"> {% endcomment %}                        
-                        <label for="login-password">To : </label>
-                        {% render_field se_form.edate placeholder="dd/mm/yyyy hh:mm" %}
-                        {% comment %} <input type="date" id="login-email" name="email" placeholder="To"> {% endcomment %}
-                    </form>
-                    <div class="row">
-                        <button type="submit" name="search_hall" form="login" value="Login" value="check availability">Search Hall</button> 
+            <div class="sub-cont">
+                <div class="img">
+                    <div class="img__text m--up">
+                        <h2>Search By Halls</h2>
+                        <p>Have a particular Hall in mind ?</p>
+                    </div>
+                    <div class="img__text m--in">
+                        <h2>Search By Time</h2>
+                        <p>Have fixed event time ?</p>
+                    </div>
+                    <div class="img__btn">
+                        <span class="m--up">GO</span>
+                        <span class="m--in">GO</span>
                     </div>
                 </div>
-            
-                <div class="content invisible">
-                    <h2>Book By Hall</h2>
-                    <form id="register">
-                        <label for="name">Hall : </label>
-                        <input type="text" id="name" name="name" placeholder="Choose Hall">
-                    </form>
-                    <button type="submit" form="register" value="register">Search</button>
+                <div class="form sign-up">
+                    <h2>Book Halls</h2>
+                    <label>
+                        <span>Choose Halls</span>
+                        <!--         <input type="text" /> -->
+                        <select class='span3' name='optionlist' tabindex='1' value='X-Men'>
+                            <option selected='selected' value='0'></option>
+                            <option value='1'>Shanon Hall</option>
+                            <option value='2'>Pascal Hall</option>
+                            <option value='3'>Aryabhatta Hall</option>
+                        </select>
+                    </label>
+                    <button type="button" class="submit">Sign Up</button>
                 </div>
-            
             </div>
-
         </div>
-         <!-- partial -->
+        <!-- partial -->
+
         <!-- Start: Footer Basic -->
         <div class="footer-basic">
             <footer>
@@ -156,4 +153,5 @@
         </script>
     {% endif %}
 </body>
+
 </html>
