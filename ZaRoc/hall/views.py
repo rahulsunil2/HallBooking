@@ -14,67 +14,71 @@ def signin(request):
 
 # home
 def home(request):
-    # when "search hall" is pressed
-    if 'search_hall' in request.POST: #get time and redirect to next page
+    # when "hall based search" is pressed
+    if 'hall_search' in request.POST:
+        hallForm = halldetail(request.POST)
+        if hallForm.is_valid():
+            
+            hall_name = hallForm.cleaned_data['hall_name']
+            hall = Hall.objects.get(name = hall_name)
+            request.session['hall_id'] = hall.id
+            request.session['hall_no'] = hall.no
+            return HttpResponseRedirect('/hall')
+            
+    # when "time based search" is pressed redirect to result page
+    elif 'time_search' in request.POST:
         dateForm = detail(request.POST)
         if dateForm.is_valid():
-            return HttpResponseRedirect('/result/?sdate=%s&edate=%s' %(dateForm.cleaned_data['sdate'],dateForm.cleaned_data['edate']))
+            request.session['sdate'] = str(dateForm.cleaned_data['sdate'])[:-9]
+            request.session['edate'] = str(dateForm.cleaned_data['edate'])[:-9]
+            return HttpResponseRedirect('/result')
+
     usrid = request.user.id
     hallBookings = Booking.objects.filter(fId_id = usrid)
-    print(hallBookings)
-    if 'hidden_field' in request.POST: #cancel halls
-        print("------------------------7777-------------------------")
+    #booking cancellation
+    if 'hidden_field' in request.POST:
         bid = hidden(request.POST)
         print(bid)
-        # print(bid.cleaned_data['cancel_booking'])
-        if bid.is_valid():
-            print("-------------------------xx--------------------------")
+        if bid.is_valid(): # if the booking_id is valid, delete it
             bookId = bid.cleaned_data['hidden_field']
             print("git bid")
             obj = Booking.objects.filter(bId=bookId)
             obj.delete()
             hallBookings = Booking.objects.filter(fId_id = usrid)
-            return render(request, 'home.html',{'se_form':detail(),'hidden_form':hidden(), "halls":hallBookings})
-    # print(hallBookings)
-    return render(request, 'home.html',{'se_form':detail(),'hidden_form':hidden(), "halls":hallBookings})
+
+    return render(request, 'home.html', {'date_form':detail(),'hall_form':halldetail(), 'hidden_form':hidden(), "halls":hallBookings})
 
 # request
 def result(request):
-    request.session['sdate']=request.GET.get('sdate')[:-10]
-    request.session['edate']=request.GET.get('edate')[:-10]
-    sdate = datetime.datetime.strptime(request.GET.get('sdate')[:-10], '%Y-%m-%d %H:%M')
-    edate = datetime.datetime.strptime(request.GET.get('edate')[:-10], '%Y-%m-%d %H:%M')
+    sdate = datetime.datetime.strptime(request.session['sdate'], '%Y-%m-%d %H:%M')
+    edate = datetime.datetime.strptime(request.session['edate'], '%Y-%m-%d %H:%M')
 
-    # when "search hall" is pressed
-    # if 'search_hall' in request.POST: #get time and redirect to next page
-    #     dateForm = detail(request.POST)
-    #     if dateForm.is_valid():
-    #         return HttpResponseRedirect('/result/?sdate=%s&edate=%s' %(dateForm.cleaned_data['sdate'],dateForm.cleaned_data['edate']))
+    # when "search hall" is pressed go to home() -- if(time_search)
 
-    halls=list(Hall.objects.all())
-    avail_halls=[]
+    # find & append avail halls
+    halls = list(Hall.objects.all())
+    avail_halls = []
     for i in halls:
         if Booking.objects.filter(Q(hallNo=i) & ((Q(sTime__lte=sdate) & Q(eTime__gte=sdate)) | (Q(sTime__lte=edate) & Q(eTime__gte=edate)) | (Q(sTime__gte=sdate) & Q(sTime__lte=edate)) | (Q(eTime__gte=sdate) & Q(eTime__lte=edate)))).exists():
             pass
         else:
             avail_halls.append(i)
+    #if halls available display
     if len(avail_halls)==0:
-        # return render(request,'home.html',{'se_form':detail(),'avail':True})
-        return render(request,'result.html',{'se_form':detail(),'avail':True,'hidden_form':hidden(),"avail_halls":avail_halls})
-    if 'hidden_field' in request.POST: #get time and redirect to next page
+        return render(request,'result.html',{'date_form':detail(),'avail':True,'hidden_form':hidden(),"avail_halls":avail_halls})
+
+    #if book is pressed  go to /book 
+    if 'hidden_field' in request.POST: #get time n redirect
         oid = hidden(request.POST)
         if oid.is_valid():
-            request.session['obj_id']=oid.cleaned_data['hidden_field']
+            request.session['hall_id'] = oid.cleaned_data['hidden_field']
             return HttpResponseRedirect('/book/')
-            # return redirect(request, 'book.html',{'desc_form':desc()})
-    return render(request,'result.html',{'se_form':detail(), 'hidden_form':hidden(),"avail_halls":avail_halls,"sdate":sdate,"edate":edate})
 
+    return render(request,'result.html',{'date_form':detail(), 'hidden_form':hidden(),"avail_halls":avail_halls,"sdate":sdate,"edate":edate})
 
 # book
 def book(request):
-    print("*************************************")
-    hall= Hall.objects.get(pk=int(request.session['obj_id']))
-    print("--------------------",hall,"---------------------")
+    hall = Hall.objects.get(pk=int(request.session['hall_id']))
     sdate = datetime.datetime.strptime(request.session['sdate'], '%Y-%m-%d %H:%M')
     edate = datetime.datetime.strptime(request.session['edate'], '%Y-%m-%d %H:%M')
     userr = User.objects.get(username=request.user) 
@@ -85,3 +89,26 @@ def book(request):
             book.save()
             return HttpResponseRedirect('/home/')
     return render(request, 'book.html',{'desc_form':desc(),"hall":hall,"sdate":sdate,"edate":edate})
+
+def hall(request):
+    timing_exist = True
+    hall = Hall.objects.get(no = int(request.session['hall_no']))
+    bookings = Booking.objects.filter(Q(hallNo = hall) & Q(eTime__gte=datetime.datetime.now()))
+
+    # when time based search is done
+    if 'hall_time_search' in request.POST:
+        dateForm = detail(request.POST)
+        if dateForm.is_valid():
+            request.session['sdate'] = str(dateForm.cleaned_data['sdate'])[:-9]
+            request.session['edate'] = str(dateForm.cleaned_data['edate'])[:-9]
+            
+            sdate = datetime.datetime.strptime(request.session['sdate'], '%Y-%m-%d %H:%M')
+            edate = datetime.datetime.strptime(request.session['edate'], '%Y-%m-%d %H:%M')
+
+            if Booking.objects.filter(Q(hallNo = hall) & ((Q(sTime__lte=sdate) & Q(eTime__gte=sdate)) | (Q(sTime__lte=edate) & Q(eTime__gte=edate)) | (Q(sTime__gte=sdate) & Q(sTime__lte=edate)) | (Q(eTime__gte=sdate) & Q(eTime__lte=edate)))).exists():
+                timing_exist = False               
+            else:
+                return HttpResponseRedirect('/book/')
+
+    return render(request,'hall.html',{'date_form':detail(),'hall':hall,'bookings':bookings, 't_exist':timing_exist})
+    

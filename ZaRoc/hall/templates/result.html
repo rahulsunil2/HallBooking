@@ -1,6 +1,6 @@
 {% comment %} <h3>Enter the date</h3>
 <form action="{% url 'home' %}" method='post' autocomplete="off"> {% csrf_token%}
-	{{se_form}}
+	{{date_form}}
 	<input type="submit" name="search_hall" value="check availability">
 </form> {% endcomment %}
 
@@ -75,22 +75,25 @@
 		</nav>
 		<!-- End: Navigation with Button -->
 		<div class="container d-xl-flex justify-content-xl-center" style="margin-top: 1%;">
-			<form class="form-inline d-sm-flex d-md-flex d-lg-flex justify-content-sm-center justify-content-md-center justify-content-lg-center">
+			<form class="form-inline d-sm-flex d-md-flex d-lg-flex justify-content-sm-center justify-content-md-center justify-content-lg-center" form action="{% url 'home' %}" method='post' autocomplete="off"> {% csrf_token%}
 				<div class="input-group">
-					<div class="input-group-prepend"><span class="input-group-text">From :&nbsp;<img src="{% static 'images/icons8-calendar-24.png'%}"></span></div>
-					<div class="input-group-append"></div>
+                    <span class="input-group-text">From :&nbsp;
+                        <img src="{% static 'images/icons8-calendar-24.png'%}">
+                    </span>
+                    {% comment %} <input class="form-control" type="date"> {% endcomment %}
+					{% render_field date_form.sdate placeholder=sdate %}
+                </div>
+				<div class="input-group">
+                    <span class="input-group-text">To :&nbsp;
+                        <img src="{% static 'images/icons8-calendar-24.png'%}">
+                    </span>
+                    {% comment %} <input class="form-control" type="date"> {% endcomment %}
+					{% render_field date_form.edate placeholder=edate %}
 				</div>
-				{% comment %} <input class="form-control" type="date"> {% endcomment %}
-				{% render_field se_form.sdate placeholder=sdate %}
 				<div class="input-group">
-					<div class="input-group-prepend"><span class="input-group-text">To :&nbsp;<img src="{% static 'images/icons8-calendar-24.png'%}"></span></div>
-					<div class="input-group-append"></div>
-				</div>
-				{% comment %} <input class="form-control" type="date"> {% endcomment %}
-				{% render_field se_form.edate placeholder=edate %}
-				<div class="input-group">
-					<div class="input-group-prepend"></div>
-					<div class="input-group-append"><button class="btn btn-primary" type="button" style="background-color: #234469;">Search Halls</button></div>
+					<button class="btn btn-primary" type="submit" style="background-color: #234469;" name="time_search">Search Halls</button>
+
+					<input type="submit" name="time_search" value="check availability">
 				</div>
 			</form>
 		</div>

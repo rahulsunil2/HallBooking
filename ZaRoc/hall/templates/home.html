@@ -92,28 +92,78 @@
                     <form id="login" action="{% url 'home' %}" method='post' autocomplete="off"> {% csrf_token%}
                         
                         <label for="login-email">From : </label>
-                        {% render_field se_form.sdate placeholder="dd/mm/yyyy hh:mm" %}
+                        {% render_field date_form.sdate placeholder="dd/mm/yyyy hh:mm" %}
                         {% comment %} <input type="date" id="login-email" name="email" placeholder="From"> {% endcomment %}                        
                         <label for="login-password">To : </label>
-                        {% render_field se_form.edate placeholder="dd/mm/yyyy hh:mm" %}
+                        {% render_field date_form.edate placeholder="dd/mm/yyyy hh:mm" %}
                         {% comment %} <input type="date" id="login-email" name="email" placeholder="To"> {% endcomment %}
                     </form>
                     <div class="row">
-                        <button type="submit" name="search_hall" form="login" value="Login" value="check availability">Search Hall</button> 
+                        <button type="submit" name="time_search" form="login" value="Login" value="check availability">Search Hall</button> 
                     </div>
                 </div>
             
                 <div class="content invisible">
                     <h2>Book By Hall</h2>
-                    <form id="register">
+                    <form id="register" action="{% url 'home' %}" method='post' autocomplete="off"> {% csrf_token%}
                         <label for="name">Hall : </label>
-                        <input type="text" id="name" name="name" placeholder="Choose Hall">
+                        <!-- <input type="text" id="name" name="name" placeholder="Choose Hall"> -->
+                        {% render_field hall_form.hall_name id="name" placeholder="Choose Hall" %}
                     </form>
-                    <button type="submit" form="register" value="register">Search</button>
+                    <button type="submit" name="hall_search" form="register" value="register">Search</button>
                 </div>
             
-            </div>
-
+            </div>            
+        </div>
+        <div class="booked-table">
+            {% comment %} <!------ Display Existing Bookings -------> {% endcomment %}
+            {% if halls %}
+                <div class="row">
+                    <div class="col">
+                        <h2 class="intro-text bookTitle" style="font-size: 160%;margin: 0px 0px 1% 0px;">Booked Halls</h2>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead style="color: rgb(255,255,255);">
+                            <tr> 
+                                <th>Cancel Booking</th>                                       
+                                <th>Hall Id </th>
+                                <th>Booking Id </th>
+                                <th>Event name</th>
+                                <th>Event Details</th>
+                                <th>From</th>
+                                <th>To</th>                                         
+                            </tr>
+                        </thead>
+                        <tbody style="color: rgba(255,255,255,0.93);">
+                            {% for hall in halls %}
+                                <tr>
+                                    <td>
+                                        <form id="cancel_button" method="POST">
+                                            {% csrf_token %}
+                                            {{hidden_form}}
+                                            <input type="hidden" name="hidden_field" value="{{ hall.bId }}">
+                                            <!-- <button type="submit">Cancel Booking</button> -->
+                                            <a href="javascript:$('#cancel_button').submit();" class="nav-link js-scroll-trigger" type="submit">Cancel</a>
+                                            
+                                        </form>
+                                    </td>
+                                    <td>{{hall.bId}}</td>
+                                    <td>{{hall.hallNo}}</td>
+                                    <td>{{hall.eventName}}</td>
+                                    <td>{{hall.sTime}}</td>
+                                    <td>{{hall.eTime}}</td>
+                                    <td>{{hall.eventDetails}}</td>                                        
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <h4> You have no Bookings</h4>
+            {% endif %}
+            {% comment %} <!----------------------------------------> {% endcomment %}
         </div>
          <!-- partial -->
         <!-- Start: Footer Basic -->
