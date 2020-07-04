@@ -1,0 +1,132 @@
+{% comment %} <form action="{% url 'book' %}" method='post' autocomplete="off"> {% csrf_token%}
+    {{desc_form.as_p}}
+    <input type="submit" name="book" value="submit&book">
+</form> {% endcomment %}
+
+{% comment %} ----------------------------------------------------- {% endcomment %}
+
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ZaRoc</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel = "icon" href = "{% static 'images/logo.png' %}" type = "image/x-icon"> 
+
+    {% comment %} <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css'%}"> {% endcomment %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    {% comment %} font - fe {% endcomment %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cabin:700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    {% comment %} loca {% endcomment %}
+     <link rel="stylesheet" href="{% static 'css/Footer-Basic.css'%}">
+    <link rel="stylesheet" href="{% static 'css/Navigation-with-Button.css'%}">
+    <link rel="stylesheet" href="{% static 'css/Projects-Clean.css'%}">
+    <link rel="stylesheet" href="{% static 'css/Projects-Horizontal.css'%}">
+</head>
+
+<body>
+    {% if user.is_authenticated %}
+        <!-- Start: Navigation with Button -->
+        <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
+            <div class="container"><a class="navbar-brand" href="/home">ZaRoc</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse"
+                    id="navcol-1">
+                    <ul class="nav navbar-nav mr-auto">
+                        <li class="nav-item" role="presentation"><a class="nav-link active" href="#">Halls</a></li>
+                    </ul>
+                    <span class="navbar-text actions"> 
+                        <form id="logout_form" method="post" action="{% url 'account_logout' %}"> {% csrf_token %}
+                            <a class="login" href="#">kavyasuresh@gmail.com</a>
+                            <a class="login" href="#">About</a>
+							{% if redirect_field_value %}
+								<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+							{% endif %}
+                            <a href="javascript:$('#logout_form').submit();" class="btn action-button" style="background-color: #0051ba;" type="submit">Logout</a>
+                        </form>
+					</span>
+                </div>
+            </div>
+        </nav>
+        <!-- End: Navigation with Button -->
+        <!-- Start: Projects Clean -->
+        <div class="projects-clean">
+            <div class="container">
+                <form action="{% url 'book' %}" method='post' autocomplete="off"> {% csrf_token%}
+                    <!-- Start: Projects -->
+                    <div class="form-row d-flex d-md-flex d-lg-flex d-xl-flex justify-content-center justify-content-md-center justify-content-lg-center justify-content-xl-center projects" style="padding: 8;">
+                        <div class="col-sm-6 col-lg-4 col-xl-6 item" style="min-width: 345px;">
+                            <div class="card" style="width: 100%;border-radius: 2rem;"><img class="card-img w-100 d-block" src="{% static 'images/'%}{{hall.no}}.jpg" style="border-radius: 2rem;">
+                                <div class="card-img-overlay d-flex flex-column justify-content-center" style="background-color: rgba(0,0,0,0.69);color: rgb(255,255,255);border-radius: 2rem;">
+                                    <h4><strong>Hall Details</strong></h4>
+                                    <p style="color: rgb(219,219,220);"><strong>Hall Name :</strong>&nbsp;{{hall.name}}</p></p>
+                                    <p style="color: rgb(219,219,220);"><strong>Hall No :</strong>&nbsp;{{hall.no}}</p>
+                                    <p style="color: rgb(219,219,220);"><strong>Hall Capacity :</strong>&nbsp;{{hall.capacity}}</p>
+                                    <p style="color: rgb(219,219,220);"><strong>Hall Incharge :</strong>&nbsp;{{hall.inCharge}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4 col-xl-6 item" style="min-width: 345px;">
+                            <h3 class="name">Event Details</h3>
+                            <p class="description"><strong>From :</strong> {{sdate}}</p>
+                            <p class="description"><strong>To :</strong> {{edate}}</p>
+                            <p class="description"><strong>Title :</strong></p>
+                            {% comment %} <input class="form-control" type="text"> {% endcomment %}
+                            {% render_field desc_form.title class="form-control" placeholder="enter event title/name" %}
+                            <p class="description"><strong>Description :&nbsp;</strong></p>
+                            {% comment %} <textarea class="form-control"></textarea> {% endcomment %}
+                            {% render_field desc_form.description class="form-control" placeholder="enter event details" %}
+                            <div class="form-row" style="margin-top: 13px;">
+                                <div class="col d-flex d-xl-flex justify-content-end justify-content-xl-center">
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-primary" type="submit" name="book" style="background-color: #0051ba;">Confirm</button>
+                                        <input type="submit" name="book" value="submit&book">
+                                        {% comment %} <button type="submit" name="search_hall" form="login" value="Login" value="check availability">Search Hall</button>  {% endcomment %}
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: Projects -->
+                </form>
+            </div>
+        </div>
+        <!-- End: Projects Clean -->
+        <!-- Start: Footer Basic -->
+        <div class="footer-basic">
+            <footer>
+                <!-- Start: Social Icons -->
+                <div class="social"><a href="#"><i class="icon ion-social-instagram"></i></a><a href="#"><i class="icon ion-social-facebook"></i></a></div>
+                <!-- End: Social Icons -->
+                <!-- Start: Links -->
+                <ul class="list-inline">
+                    <li class="list-inline-item"><a href="#">Home</a></li>
+                    <li class="list-inline-item"><a href="#">About</a></li>
+                    <li class="list-inline-item"><a href="#">Terms</a></li>
+                </ul>
+                <!-- End: Links -->
+                <!-- Start: Copyright -->
+                <p class="copyright">ZaRoc © 2020</p>
+                <!-- End: Copyright -->
+            </footer>
+        </div>
+        <!-- End: Footer Basic -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+		<script src="{% static 'js/grayscale.js'%}"></script>
+    {% else %}
+		<script>
+			window.location = "{% url 'signin' %}";
+		</script>
+	{% endif %}
+</body>
+</html>
