@@ -1,12 +1,17 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse,HttpResponseRedirect
 import datetime
 from .forms import *
 from .models import Hall,Booking
 from django.contrib.auth.models import User
 from django.db.models import Q
-
+import csv
+from django.contrib.sites.models import Site
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_text
+from django.core.mail import EmailMessage
+from .tokens import *
 # Create your views here.
 
 def signin(request):
@@ -39,9 +44,21 @@ def home(request):
             bookId = bid.cleaned_data['hidden_field']
             obj = Booking.objects.filter(bId=bookId)
             obj.delete()
-            hallBookings = Booking.objects.filter(fId_id = usrid)
+            hallBookings = Booking.objects.filter(Q(fId_id = usrid) & Q(eTime__gte=datetime.datetime.now()))
             return render(request, 'home.html',{'se_form':detail(),'hidden_form':hidden(), "halls":hallBookings})
     return render(request, 'home.html',{'se_form':detail(),'h_form': searchbar() ,'hidden_form':hidden(), "halls":hallBookings, 'h_exist':h_exist})
+
+def csvdown(request):
+    usrid = request.user.id
+    hallBookings = Booking.objects.filter(fId_id = usrid)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="Bookings.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Hall No', 'Booking Id', 'Event name', 'Event Details','From','To'])
+    for hall in hallBookings:
+        writer.writerow([hall.hallNo, hall.bId, hall.eventName, hall.eventDetails, hall.sTime, hall.eTime, ])
+    return response
 
 def result(request):
     t_exist=True
@@ -78,6 +95,17 @@ def book(request):
         if eve_desc.is_valid():
             book = Booking.objects.create(sTime=sdate,eTime=edate,fId=userr,hallNo=hall,eventName=eve_desc.cleaned_data['eventName'],eventDetails=eve_desc.cleaned_data['eventDetails'],)
             book.save()
+            user = request.user
+            current_site = Site.objects.get_current()
+            body = render_to_string('ver_email.html', {
+            'user':user, 'domain':current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': verification_token.make_token(user),'bid':urlsafe_base64_encode(force_bytes(book.bId)),
+            })
+            subject = "Verify Hall booking"
+            to_mail = "bookings.mbcet@gmail.com"
+            mail = EmailMessage(subject,body,to=[to_mail])
+            mail.send()
             return HttpResponseRedirect('/home/')
     return render(request, 'book.html',{'desc_form':desc(),"hall":hall,"sdate":sdate,"edate":edate})
 
@@ -99,3 +127,39 @@ def hall(request):
             else:
                 return HttpResponseRedirect('/book/')
     return render(request,'hall.html',{'se_form': detail(),'hall':h_info,'b_info':b_info,'t_exist':t_exist})
+
+def confirm(request,uid,token,bid):
+    return render(request,'confirm_booking.html',{'uid':uid,'token':token,'bid':bid,'stat':'rejected'})
+
+def verified(request,uid,token,bid,stat):
+    try:
+        user_id = force_text(urlsafe_base64_decode(uid))
+        user = User.objects.get(id = user_id)
+        book_id = force_text(urlsafe_base64_decode(bid))
+        print(book_id)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    
+    if user is not None and verification_token.check_token(user,token):
+        user.is_active = False
+        if Booking.objects.filter(Q(bId = book_id) & Q(fId = user)).exists():
+            x = Booking.objects.get(bId = book_id)
+            x.status = stat
+            x.save()
+            if stat == 'confirmed':
+                email = user.email
+                sub = "Booking confirmed"
+                msg = "confirmed hiuuapaoh"
+                mail = EmailMessage(sub,msg,to=[email])
+                mail.send()
+                return HttpResponse("booking confirmed")
+            else:
+                x.delete()
+                email = user.email
+                sub = "Booking confirmed"
+                msg = "confirmed hiuuapaoh"
+                mail = EmailMessage(sub,msg,to=[email])
+                mail.send()
+                return HttpResponse("booking rejected")
+    else:
+        return HttpResponse("bookings not confirmed ")

@@ -1,0 +1,23 @@
+{% load staticfiles %}
+
+<html>
+<head>
+    <title>verify</title>
+</head>
+<body>
+
+    <h2> Press 'confrim' to confirm booking.<h2>
+    <div>
+        <form action="{% url 'verified' uid=uid token=token bid=bid stat='confirmed' %}" name="confirm" method="post">
+            {% csrf_token %}
+            {{form}}
+            <input type="submit" name="confirm" value="confirm"/>
+        </form>
+        <form action="{% url 'verified' uid=uid token=token bid=bid stat='rejected' %}" name="reject" method="post">
+            {% csrf_token %}
+            {{form}}
+            <input type="submit" name="reject" value="reject"/>
+        </form>
+    </div>
+</body>
+</html>

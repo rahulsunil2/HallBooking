@@ -78,6 +78,7 @@
                     </div>
                 </div>
                 <div class="booked-table">
+                    <a href="{% url 'exportcsv' %}">Export all bookings</a>
                     {% comment %} <!------ Display Existing Bookings -------> {% endcomment %}
                     {% if halls %}
                         <div class="row">
@@ -86,6 +87,7 @@
                             </div>
                         </div>
                         <div class="table-responsive">
+                            
                             <table class="table">
                                 <thead style="color: rgb(255,255,255);">
                                     <tr> 
@@ -95,7 +97,8 @@
                                         <th>Event name</th>
                                         <th>Event Details</th>
                                         <th>From</th>
-                                        <th>To</th>                                         
+                                        <th>To</th>  
+                                        <th>Status</th>                                        
                                     </tr>
                                 </thead>
                                 <tbody style="color: rgba(255,255,255,0.93);">
@@ -116,7 +119,8 @@
                                             <td>{{hall.eventName}}</td>
                                             <td>{{hall.eventDetails}}</td>   
                                             <td>{{hall.sTime}}</td>
-                                            <td>{{hall.eTime}}</td>                                     
+                                            <td>{{hall.eTime}}</td>  
+                                            <td>{{hall.status}}</td>                                 
                                         </tr>
                                     {% endfor %}
                                 </tbody>

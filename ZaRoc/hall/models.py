@@ -23,3 +23,4 @@ class Booking(models.Model):
     eventDetails = models.TextField('Event Details', blank=True)
     class Meta:
         verbose_name_plural = "Bookings"
+    status = models.CharField(default='Not Confirmed',max_length=50)

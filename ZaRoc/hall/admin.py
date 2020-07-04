@@ -10,4 +10,4 @@ class HallAdmin(admin.ModelAdmin):
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ['bId', 'sTime', 'eTime', 'hallNo', 'fId', 'eventName', 'eventDetails']
+    list_display = ['bId', 'sTime', 'eTime', 'hallNo', 'fId', 'eventName', 'eventDetails','status']
