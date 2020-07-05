@@ -1,51 +1,221 @@
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
-
-html {
-  font-family: "Open Sans", sans-serif;
-}
-h1 {
-  color: #444;
+* {
+  box-sizing: border-box;
 }
 
-/* .login {} */
+body {
+  --wrapper-width: 0.85;
+  --content-row-width: 0.8;
+  --content-element-width: 0.5;
+  --content-height: 400px;
+  --delta: 40px;
+  --background-delta: var(--delta);
 
-.btn {
-  padding: 1em 2.1em 1.1em;
-  border-radius: 3px;
-  margin: 8px 8px 8px 8px;
-  color: #fbdedb;
-  background-color: #fbdedb;
-  display: inline-block;
-  /* background: #e74c3c; */
-  -webkit-transition: 0.3s;
-  -moz-transition: 0.3s;
-  -o-transition: 0.3s;
-  transition: 0.3s;
-  /* font-family: sans-serif; */
-  font-weight: 800;
-  font-size: 1.2em;
-  /* text-transform: uppercase; */
-  text-align: center;
+  --background-width: calc((calc(100%) * var(--wrapper-width) * var(--content-row-width) * 0.5) - var(--background-delta));
+
+  --padding: var(--background-delta);
+  --double-padding: calc(var(--padding) * 2);
+
+  --negative-delta: calc(0px - var(--background-delta));
+
+  --foreground-color: #fff;
+  --highlight-color: #2e2a5f;
+}
+
+body {
+  background: #dfe2e8;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  /* font-family: 'Montserrat', sans-serif; */
+}
+
+p, h2 {
+  margin-block-start: 0;
+  margin-block-end: 0;
+  user-select: none;
+}
+
+a {
   text-decoration: none;
-  -webkit-box-shadow: 0em -0.3rem 0em rgba(0, 0, 0, 0.1) inset;
-  -moz-box-shadow: 0em -0.3rem 0em rgba(0, 0, 0, 0.1) inset;
-  box-shadow: 0em -0.3rem 0em rgba(0, 0, 0, 0.1) inset;
-  position: relative;
 }
-.btn:hover, .btn:focus {
-  opacity: 0.8;
+
+form {
+  width: 100%;
 }
-.btn:active {
-  -webkit-transform: scale(0.80);
-  -moz-transform: scale(0.80);
-  -ms-transform: scale(0.80);
-  -o-transform: scale(0.80);
-  transform: scale(0.80);
+form label {
+  display: none;
 }
-.btn.circular {
-  border-radius: 50em !important;
+form input, form select {
+  font-family: inherit;
+  font-size: 1.1em;
+  line-height: 2.4em;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid gray;
+  outline: 0;
+  background: transparent;
 }
-/* Colours */
-.red {
-  background-color: #d55050;
+
+button {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  border-radius: 3px;
+  width: 100px;
+  height: 50px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+button:focus {
+  outline: 0;
+}
+button:hover {
+  transform: scale(1.1);
+}
+button:active {
+  background-color: #686b74;
+}
+
+.wrapper {
+  width: calc(100% * var(--wrapper-width));
+  margin: calc(var(--background-delta) + 40px) auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: baseline;
+  height: inherit;
+  padding: 20px 40px;
+  text-align: left;
+  transition: opacity .8s linear;
+  max-width: calc(100% * var(--content-element-width));
+}
+.content.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.content.invisible {
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  padding: 0;
+}
+
+.background, .foreground {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-radius: 3px;
+  width: calc(100% * var(--content-row-width));
+  --realw: calc(100% * var(--content-row-width));
+  height: var(--content-height);
+}
+
+.background {
+  order: 2;
+  transform: translateY(-100%);
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  /* bg gradient */
+  background: #0f0c29; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #243964, #302b63, #0f0c29); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #24243e, #302b63, #0f0c29); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  color: white;
+  border: 1px solid beige;
+}
+
+.foreground {
+  order: 1;
+  z-index: 100;
+  padding: 0 var(--background-delta);
+  background-color: transparent;
+  pointer-events: none;
+  margin-bottom: calc(var(--padding) - var(--background-delta));
+}
+.foreground:before {
+  position: absolute;
+  z-index: -1;
+  content: "";
+  display: block;
+  width: var(--background-width);
+  height: calc(var(--content-height) + 2 * var(--background-delta));
+  border-radius: 3px;
+  background-color: var(--foreground-color);
+  box-shadow: 1px 1px 6px 3px rgba(0, 0, 0, 0.4);
+  transform: translate(0, var(--negative-delta));
+  transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.foreground.right:before {
+  transform: translate(100%, var(--negative-delta));
+  /* transform: translate(calc(100% * var(--content-row-width)) , var(--negative-delta)); */
+}
+.foreground h2 {
+  color: var(--highlight-color);
+}
+.foreground button {
+  background-color: var(--highlight-color);
+  border: none;
+}
+.foreground a {
+  color: var(--highlight-color);
+  text-align: right;
+}
+
+.row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media screen and (max-width: 800px) and (max-resolution: 280dpi), screen and (max-width: 700px) and (min-resolution: 281dpi) {
+  body {
+    --wrapper-width: 0.9;
+    --background-width: calc((calc(100%) * var(--wrapper-width) * var(--content-row-width)));
+    --content-element-width: 1;
+    --content-height: 280px;
+    --background-delta: 0px;
+    --padding: 20px;
+  }
+
+  .content {
+    transition: opacity .2s ease-in;
+  }
+
+  .background, .foreground, .foreground:before, .foreground.right:before {
+    box-shadow: none;
+    transform: none;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  form input {
+    font-size: 1em;
+    line-height: 2em;
+  }
+
+  p, a, button {
+    font-size: .85em;
+    line-height: 1.4em;
+  }
+}
+
+@media screen and (max-width: 800px) and (orientation: landscape) {
+  body {
+    --content-height: 210px;
+    --content-row-width: 0.95;
+  }
+
+  .wrapper {
+    margin: calc(var(--background-delta) + 10px) auto;
+  }
 }
