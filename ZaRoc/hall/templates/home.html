@@ -55,7 +55,7 @@
                     </ul>
                     <span class="navbar-text actions"> 
                         <form id="logout_form" method="post" action="{% url 'account_logout' %}"> {% csrf_token %}
-                            <a class="login" href="#">kavyasuresh@gmail.com</a>
+                            <a class="login" href="#">{{user.email}}</a>
                             <a class="login" href="#">About</a>
 							{% if redirect_field_value %}
 								<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
@@ -116,6 +116,7 @@
             </div>            
         </div>
         <div class="booked-table">
+            <a href="{% url 'exportcsv' %}">Export all bookings</a>
             {% comment %} <!------ Display Existing Bookings -------> {% endcomment %}
             {% if halls %}
                 <div class="row">

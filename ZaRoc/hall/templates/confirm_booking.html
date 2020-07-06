@@ -1,0 +1,94 @@
+{% load staticfiles %}
+
+<html>
+<head>
+    <title>ZaRoc - Verify</title>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">    
+	<link rel = "icon" href = "{% static 'images/logo.png' %}" type = "image/x-icon"> 
+
+	{% comment %} bootstrap - for frontend {%  endcomment %}
+    {% comment %} <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css'%}"> {% endcomment %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+
+    {% comment %} local - for frontend {% endcomment %}
+    <link rel="stylesheet" href="{% static 'css/Footer-Basic.css'%}">
+    <link rel="stylesheet" href="{% static 'css/Navigation-with-Button.css'%}">
+    <link rel="stylesheet" href="{% static 'css/Projects-Horizontal.css'%}">
+
+</head>
+<body >
+    <!-- Start: Navigation with Button -->
+    <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
+        <div class="container"><a class="navbar-brand" href="#">ZaRoc</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse"
+                id="navcol-1">
+                <ul class="nav navbar-nav mr-auto">
+                    <li class="nav-item" role="presentation"></li>
+                    <li class="nav-item" role="presentation"></li>
+                </ul><span class="navbar-text actions"> <a class="login" href="#">About</a></span></div>
+        </div>
+    </nav>
+    <!-- End: Navigation with Button -->
+    <!-- Start: Projects Horizontal -->
+    <div class="projects-horizontal" style="background-color: rgba(255,255,255,0);/*margin: calc(1%);*/position: relative;">
+        <div class="container">
+            <!-- Start: Projects -->
+            <div class="row d-sm-flex d-md-flex d-lg-flex d-xl-flex justify-content-sm-center justify-content-md-center justify-content-lg-center justify-content-xl-center projects" style="padding: 0;">
+                <div class="col-sm-6 col-xl-8 item" style="margin-top: 20px;background-color: #ffffff;padding-bottom: 32px;">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-5 col-xl-6"><a href="#"><img class="img-fluid" src="{% static 'images/101.jpg'%}"></a></div>
+                        <div class="col text-left">
+                            <p class="description"><strong>Hall : </strong>{{booking.hallNo}}</p>
+                            <p class="description"><strong>Hall Capacity : </strong>{{hall.capacity}}</p>
+                            <p class="description"><strong>Hall Incharge : </strong>{{hall.inCharge}}</p>
+                            <p class="description"><strong>Booked By: </strong>{{booking.fId}}</p>
+                            <hr>
+                            <p class="description"><strong> Event Name : </strong>{{booking.eventName}}</p>
+                            <p class="description"><strong>Event Details : </strong>{{booking.eventDetails}}</p>
+                            <p class="description"><strong> From : </strong>{{booking.sTime}}</p>
+                            <p class="description"><strong> To : </strong>{{booking.eTime}}</p>
+                            <p class="description"><strong>Status : </strong>{{booking.status}}</p>          
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End: Projects -->
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <form action="{% url 'verified' uid=uid token=token bid=bid stat='confirmed' %}" name="confirm" method="post"> {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col offset-xl-0 d-flex d-sm-flex d-xl-flex justify-content-end justify-content-sm-end justify-content-xl-end" style="padding: 1em;">
+                                <form action="{% url 'verified' uid=uid token=token bid=bid stat='confirmed' %}" name="confirm" method="post"> {% csrf_token %}
+                                    <button type="submit" name="confirm" value="confirm" class="btn btn-primary"style="height: 50px;width: auto;">Confirm</button>
+                                </form>
+                                
+                            </div>
+                            <div class="col offset-xl-0 d-xl-flex justify-content-xl-start" style="padding: 1em;">
+                                <form action="{% url 'verified' uid=uid token=token bid=bid stat='rejected' %}" name="reject" method="post"> {% csrf_token %}
+                                    <button type="submit" name="reject" value="reject" class="btn btn-primary" style="height: 50px;width: auto;">Reject</button>
+                                </form>
+                                
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End: Projects Horizontal -->
+    <!-- Start: Footer Basic -->
+    <div class="footer-basic" style="/*position: fixed;*/bottom: 0px;width: 100%;">
+        <footer>
+            <!-- Start: Copyright -->
+            <p class="copyright">ZaRoc © 2020</p>
+            <!-- End: Copyright -->
+        </footer>
+    </div>
+    <!-- End: Footer Basic -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
