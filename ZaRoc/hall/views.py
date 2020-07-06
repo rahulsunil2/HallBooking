@@ -2,8 +2,10 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse,HttpResponseRedirect
 import datetime
 from .forms import *
-from .models import Hall,Booking
+from .models import Hall,Booking,Staff
 from django.contrib.auth.models import User
+from django.contrib.auth import logout
+from django.contrib import messages
 from django.db.models import Q
 
 # csv 
@@ -18,10 +20,20 @@ from django.core.mail import EmailMessage
 from .tokens import *
 
 def signin(request):
-    return render(request, 'signin.html') 
+    return render(request,'signin.html') 
 
 # home
 def home(request):
+    # email check
+    try:
+        x = Staff.objects.get(email = request.user.email)
+    except:
+        #flush session & redirect
+        request.session.flush()
+        logout(request)
+        messages.info(request, "Use Correct Email-id")
+        return redirect('account_logout')
+    
     # when "hall based search" is pressed
     if 'hall_search' in request.POST:
         hallForm = halldetail(request.POST)
@@ -139,10 +151,7 @@ def book(request):
             'token': verification_token.make_token(user),
             'bid':urlsafe_base64_encode(force_bytes(book.bId)),
             })
-
-            print('-----------------------------------',user, ' ',current_site.domain,' ',urlsafe_base64_encode(force_bytes(user.pk)),' ',verification_token.make_token(user),' ',urlsafe_base64_encode(force_bytes(book.bId)),'-----------------------------------')
-            print(body)
-                        
+            print(body) 
             subject = "Verify Hall booking"
             to_mail = "bookings.mbcet@gmail.com"
             mail = EmailMessage(subject,body,to=[to_mail])
@@ -152,18 +161,16 @@ def book(request):
     return render(request, 'book.html',{'desc_form':desc(),"hall":hall,"sdate":sdate,"edate":edate})
     
 def confirm(request,uid,token,bid):
-    print(" ----------inonfirmed --------")
     try:
         booking_info = Booking.objects.get(bId = force_text(urlsafe_base64_decode(bid)))
     except:
         print("---- An exception occurred ------------------")
         return HttpResponse("Already Rejected")
-    hall = Hall.objects.get(name = booking_info.hallNo)
     if(booking_info.status == 'confirmed' ):
-        print(" yaaaaaaaaaaaaaaaaaass   Already Confirmed ")
         return HttpResponse("Already Confirmed")
-    
+    hall = Hall.objects.get(name = booking_info.hallNo)
     return render(request,'confirm_booking.html',{'uid':uid,'token':token,'bid':bid,'stat':'rejected','booking':booking_info, 'hall':hall})
+
 
 def verified(request,uid,token,bid,stat):
     try:
