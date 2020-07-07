@@ -15,9 +15,14 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
+    <!-- Datedropper -->
+    <link rel="stylesheet" href="{% static 'css/datedropper.min.css'%}">
+    <!-- timedropper -->
+    <link rel="stylesheet" href="{% static 'css/timedropper.min.css'%}">
     <!-- XDSoft DateTimePicker -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" /> 
-
+    <!-- <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
+        integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" /> -->
     {% comment %} font {% endcomment %}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cabin:700">
@@ -82,16 +87,22 @@
         <div class="container d-sm-flex d-md-flex d-lg-flex d-xl-flex justify-content-sm-center justify-content-md-center justify-content-lg-center justify-content-xl-center" style="margin-top: 1%;">
             <form class="form-inline d-sm-flex d-md-flex d-lg-flex justify-content-sm-center justify-content-md-center justify-content-lg-center" style="width: 709px;" action="{% url 'hall' %}" method='post' autocomplete="off"> {% csrf_token%}
                     <div class="input-group">
+                    <span class="input-group-text">Date :&nbsp;
+                        <img src="{% static 'images/icons8-calendar-24.png'%}">
+                    </span>
+                    {% render_field date_form.date class="form-control" placeholder="dd/mm/yyyy" %}
+                </div>
+                <div class="input-group">
                     <span class="input-group-text">From :&nbsp;
                         <img src="{% static 'images/icons8-calendar-24.png'%}">
                     </span>
-                    {% render_field date_form.sdate class="form-control" placeholder="dd/mm/yyyy hh:mm" %}
+                    {% render_field date_form.stime class="form-control" placeholder="hh:mm" %}
                 </div>
                 <div class="input-group">
                     <span class="input-group-text">To :&nbsp;
                         <img src="{% static 'images/icons8-calendar-24.png'%}">
                     </span>
-                    {% render_field date_form.edate class="form-control" placeholder="dd/mm/yyyy hh:mm" %}
+                    {% render_field date_form.etime class="form-control" placeholder="hh:mm" %}
                 </div>
                 <div class="input-group">
                     <button class="btn btn-primary" type="submit"  name="hall_time_search" style="background-color: #234469;">Search</button>
@@ -171,13 +182,16 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
         <script src="{% static 'js/grayscale.js'%}"></script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
-            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
+            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script> -->
+        <script src="{% static 'js/timedropper.min.js'%}"></script>
+        <script src="{% static 'js/datedropper.pro.min.js'%}"></script>
         <script>
             $(function () {
-                $("#id_sdate").datetimepicker({ format: 'd/m/Y H:i', });
-                $("#id_edate").datetimepicker({ format: 'd/m/Y H:i', });
-            });
+                $("#id_date").dateDropper({ format: 'd/m/Y',largeOnly: true});
+                $("#id_stime").timeDropper({meridians: true,setCurrentTime:true,primaryColor:'#2e2a5f',borderColor:'#2e2a5f'});
+                $("#id_etime").timeDropper({meridians: true,setCurrentTime:true,primaryColor:'#2e2a5f',borderColor:'#2e2a5f'});
+             });
         </script>
         <script src="{% static 'js/script.js'%}"></script>
     {% else %}

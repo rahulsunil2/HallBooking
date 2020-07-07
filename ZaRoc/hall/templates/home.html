@@ -20,11 +20,14 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
-
+    <!-- Datedropper -->
+    <link rel="stylesheet" href="{% static 'css/datedropper.min.css'%}">
+    <!-- timedropper -->
+    <link rel="stylesheet" href="{% static 'css/timedropper.min.css'%}">
     <!-- XDSoft DateTimePicker -->
-    <link rel="stylesheet"
+    <!-- <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
-        integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+        integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" /> -->
     {% comment %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
         integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
@@ -55,7 +58,7 @@
                     </ul>
                     <span class="navbar-text actions"> 
                         <form id="logout_form" method="post" action="{% url 'account_logout' %}"> {% csrf_token %}
-                            <a class="login" href="#">kavyasuresh@gmail.com</a>
+                            <a class="login" href="#">{{user.email}}</a>
                             <a class="login" href="#">About</a>
 							{% if redirect_field_value %}
 								<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
@@ -91,11 +94,14 @@
                     <h2>Book By Time</h2>
                     <form id="login" action="{% url 'home' %}" method='post' autocomplete="off"> {% csrf_token%}
                         
-                        <label for="login-email">From : </label>
-                        {% render_field date_form.sdate placeholder="dd/mm/yyyy hh:mm" %}
+                        <label for="login-email">Date : </label>
+                        {% render_field date_form.date placeholder="dd/mm/yyyy" %}
                         {% comment %} <input type="date" id="login-email" name="email" placeholder="From"> {% endcomment %}                        
+                        <label for="login-password">From : </label>
+                        {% render_field date_form.stime placeholder="hh:mm" %}
+                        {% comment %} <input type="date" id="login-email" name="email" placeholder="To"> {% endcomment %}
                         <label for="login-password">To : </label>
-                        {% render_field date_form.edate placeholder="dd/mm/yyyy hh:mm" %}
+                        {% render_field date_form.etime placeholder="hh:mm" %}
                         {% comment %} <input type="date" id="login-email" name="email" placeholder="To"> {% endcomment %}
                     </form>
                     <div class="row">
@@ -116,6 +122,7 @@
             </div>            
         </div>
         <div class="booked-table">
+            <a href="{% url 'exportcsv' %}">Export all bookings</a>
             {% comment %} <!------ Display Existing Bookings -------> {% endcomment %}
             {% if halls %}
                 <div class="row">
@@ -191,12 +198,15 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
         <script src="{% static 'js/grayscale.js'%}"></script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
-            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
+            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script> -->
+        <script src="{% static 'js/timedropper.min.js'%}"></script>
+        <script src="{% static 'js/datedropper.pro.min.js'%}"></script>
         <script>
             $(function () {
-                $("#id_sdate").datetimepicker({ format: 'd/m/Y H:i', });
-                $("#id_edate").datetimepicker({ format: 'd/m/Y H:i', });
+                $("#id_date").dateDropper({ format: 'd/m/Y',largeOnly: true});
+                $("#id_stime").timeDropper({meridians: true,setCurrentTime:true,primaryColor:'#2e2a5f',borderColor:'#2e2a5f'});
+                $("#id_etime").timeDropper({meridians: true,setCurrentTime:true,primaryColor:'#2e2a5f',borderColor:'#2e2a5f'});
             });
         </script>
         <script src="{% static 'js/script.js'%}"></script>

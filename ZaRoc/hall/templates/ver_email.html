@@ -1,0 +1,8 @@
+
+{% autoescape off %}
+{{ user.username }} has requested a hall booking.
+
+click here to confirm the booking
+
+http://{{ domain }}{% url 'confirm' uid=uid token=token bid=bid %}
+{% endautoescape %}

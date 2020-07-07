@@ -15,7 +15,7 @@
     <head>
 		<title>ZaRoc</title>
     <meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">    
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 	<link rel = "icon" href = "{% static 'images/logo.png' %}" type = "image/x-icon"> 
     <style>body {font-family: Arial, sans-serif;}</style>
 
@@ -25,9 +25,12 @@
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-
+    <!-- Datedropper -->
+    <link rel="stylesheet" href="{% static 'css/datedropper.min.css'%}">
+    <!-- timedropper -->
+    <link rel="stylesheet" href="{% static 'css/timedropper.min.css'%}">
     <!-- XDSoft DateTimePicker -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" /> 
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />  -->
 
     {% comment %} font {% endcomment %}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
@@ -57,18 +60,14 @@
 						<li class="nav-item" role="presentation"><a class="nav-link active" href="#">Halls</a></li>
 					</ul>
 					<span class="navbar-text actions"> 
-						<a class="login" href="#">kavyasuresh@gmail.com</a>
-						<a class="login" href="#">About</a>
-						<a class="btn btn-light action-button" role="button" href="#" style="background-color:  #2e2a5f;">Logout</a>
-
-						{% comment %} <!-- logout --> {% endcomment %}
-						<form id="logout_form" method="post" action="{% url 'account_logout' %}"> {% csrf_token %}
+                        <form id="logout_form" method="post" action="{% url 'account_logout' %}"> {% csrf_token %}
+                            <a class="login" href="#">{{user.email}}</a>
+                            <a class="login" href="#">About</a>
 							{% if redirect_field_value %}
 								<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
 							{% endif %}
-							<a href="javascript:$('#logout_form').submit();" class="nav-link js-scroll-trigger" type="submit">Logout</a>
-						</form>
-						{% comment %} <!------------> {% endcomment %}
+                            <a href="javascript:$('#logout_form').submit();" class="btn action-button" style="background-color: #2e2a5f;" type="submit">Logout</a>
+                        </form>
 					</span>
 				</div>
 			</div>
@@ -77,23 +76,28 @@
 		<div class="container d-xl-flex justify-content-xl-center" style="margin-top: 1%;">
 			<form class="form-inline d-sm-flex d-md-flex d-lg-flex justify-content-sm-center justify-content-md-center justify-content-lg-center" form action="{% url 'home' %}" method='post' autocomplete="off"> {% csrf_token%}
 				<div class="input-group">
+                    <span class="input-group-text">Date :&nbsp;
+                        <img src="{% static 'images/icons8-calendar-24.png'%}">
+                    </span>
+                    {% comment %} <input class="form-control" type="date"> {% endcomment %}
+					{% render_field date_form.date placeholder=sdate %}
+                </div>
+				<div class="input-group">
                     <span class="input-group-text">From :&nbsp;
                         <img src="{% static 'images/icons8-calendar-24.png'%}">
                     </span>
                     {% comment %} <input class="form-control" type="date"> {% endcomment %}
-					{% render_field date_form.sdate placeholder=sdate %}
-                </div>
+					{% render_field date_form.stime placeholder=edate %}
+				</div>
 				<div class="input-group">
                     <span class="input-group-text">To :&nbsp;
                         <img src="{% static 'images/icons8-calendar-24.png'%}">
                     </span>
                     {% comment %} <input class="form-control" type="date"> {% endcomment %}
-					{% render_field date_form.edate placeholder=edate %}
+					{% render_field date_form.etime placeholder=edate %}
 				</div>
 				<div class="input-group">
 					<button class="btn btn-primary" type="submit" style="background-color: #234469;" name="time_search">Search Halls</button>
-
-					<input type="submit" name="time_search" value="check availability">
 				</div>
 			</form>
 		</div>
@@ -163,13 +167,17 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
 		<script src="{% static 'js/grayscale.js'%}"></script>
 
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
-		<script>
-			$(function () {
-			$("#id_sdate").datetimepicker({format: 'd/m/Y H:i',});
-			$("#id_edate").datetimepicker({format: 'd/m/Y H:i',});
-		});
-		</script>
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script> -->
+			
+        <script src="{% static 'js/timedropper.min.js'%}"></script>
+        <script src="{% static 'js/datedropper.pro.min.js'%}"></script>
+        <script>
+            $(function () {
+                $("#id_date").dateDropper({ format: 'd/m/Y',largeOnly: true});
+                $("#id_stime").timeDropper({meridians: true,setCurrentTime:true,primaryColor:'#2e2a5f',borderColor:'#2e2a5f'});
+                $("#id_etime").timeDropper({meridians: true,setCurrentTime:true,primaryColor:'#2e2a5f',borderColor:'#2e2a5f'});
+            });
+        </script>
 	{% else %}
 		<script>
 			window.location = "{% url 'signin' %}";

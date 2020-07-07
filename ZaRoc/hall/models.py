@@ -21,5 +21,16 @@ class Booking(models.Model):
     fId = models.ForeignKey(User, models.SET_NULL, null=True)
     eventName = models.CharField(max_length=60)
     eventDetails = models.TextField('Event Details', blank=True)
+    status = models.CharField(default='Not Confirmed',max_length=50)
     class Meta:
         verbose_name_plural = "Bookings"
+
+class Staff(models.Model):
+    sId = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=60)
+    email = models.CharField(max_length=60)
+    hod = models.BooleanField(default=False)
+    def __str__(self):
+        return str(self.name)
+    class Meta:
+        verbose_name_plural = "Staffs"
