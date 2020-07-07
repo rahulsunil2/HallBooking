@@ -15,7 +15,7 @@
     <head>
 		<title>ZaRoc</title>
     <meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">    
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 	<link rel = "icon" href = "{% static 'images/logo.png' %}" type = "image/x-icon"> 
     <style>body {font-family: Arial, sans-serif;}</style>
 
@@ -57,18 +57,14 @@
 						<li class="nav-item" role="presentation"><a class="nav-link active" href="#">Halls</a></li>
 					</ul>
 					<span class="navbar-text actions"> 
-						<a class="login" href="#">kavyasuresh@gmail.com</a>
-						<a class="login" href="#">About</a>
-						<a class="btn btn-light action-button" role="button" href="#" style="background-color:  #2e2a5f;">Logout</a>
-
-						{% comment %} <!-- logout --> {% endcomment %}
-						<form id="logout_form" method="post" action="{% url 'account_logout' %}"> {% csrf_token %}
+                        <form id="logout_form" method="post" action="{% url 'account_logout' %}"> {% csrf_token %}
+                            <a class="login" href="#">{{user.email}}</a>
+                            <a class="login" href="#">About</a>
 							{% if redirect_field_value %}
 								<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
 							{% endif %}
-							<a href="javascript:$('#logout_form').submit();" class="nav-link js-scroll-trigger" type="submit">Logout</a>
-						</form>
-						{% comment %} <!------------> {% endcomment %}
+                            <a href="javascript:$('#logout_form').submit();" class="btn action-button" style="background-color: #2e2a5f;" type="submit">Logout</a>
+                        </form>
 					</span>
 				</div>
 			</div>
@@ -92,8 +88,6 @@
 				</div>
 				<div class="input-group">
 					<button class="btn btn-primary" type="submit" style="background-color: #234469;" name="time_search">Search Halls</button>
-
-					<input type="submit" name="time_search" value="check availability">
 				</div>
 			</form>
 		</div>
