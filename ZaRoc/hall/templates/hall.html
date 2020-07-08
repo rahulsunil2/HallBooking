@@ -1,153 +1,199 @@
 {% load staticfiles %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
 <html>
 <head>
-    <title>ZaRoc</title>
+	<title>ZaRoc</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel = "icon" href = "{% static 'images/logo.png' %}" type = "image/x-icon"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">    
+	<link rel = "icon" href = "{% static 'images/logo.png' %}" type = "image/x-icon"> 
     <style>body {font-family: Arial, sans-serif;}</style>
 
+	{% comment %} bootstrap - for frontend {%  endcomment %}
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css'%}">
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
+    <!-- Datedropper -->
+    <link rel="stylesheet" href="{% static 'css/datedropper.min.css'%}">
+    <!-- timedropper -->
+    <link rel="stylesheet" href="{% static 'css/timedropper.min.css'%}">
     <!-- XDSoft DateTimePicker -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" /> 
-    {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script> {% endcomment %}
-
+    <!-- <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
+        integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" /> -->
     {% comment %} font {% endcomment %}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cabin:700">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="{% static 'fonts/font-awesome.min.css'%}">
+    <link rel="stylesheet" href="{% static 'fonts/ionicons.min.css'%}">
 
-    {% comment %} local {% endcomment %}
-    <link rel="stylesheet" href="{% static 'css/untitled.css'%}">
 
+    {% comment %} local - for frontend {% endcomment %}
+    <link rel="stylesheet" href="{% static 'css/Footer-Basic.css'%}">
+    <link rel="stylesheet" href="{% static 'css/Navigation-with-Button.css'%}">
+    <link rel="stylesheet" href="{% static 'css/Projects-Horizontal.css'%}">
 </head>
+
 <body>
     {% if user.is_authenticated %}
-        <nav class="navbar navbar-light navbar-expand-md bg-dark navbar navbar-expand-lg fixed-top" id="mainNav">
-            <div class="container">
-                <a class="navbar-brand js-scroll-trigger" href="#">HALL BOOKING</a>
-                <button data-toggle="collapse" class="navbar-toggler navbar-toggler-right" data-target="#navbarResponsive" type="button" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" value="Menu"><i class="fa fa-bars"></i></button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link js-scroll-trigger" role="presentation"><a class="nav-link active js-scroll-trigger" href="#">{{user}}</a></li>
-                        <li class="nav-item nav-link js-scroll-trigger" role="presentation"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
-                        <li class="nav-item nav-link js-scroll-trigger" role="presentation">
-                            <form id="logout_form" method="post" action="{% url 'account_logout' %}">
-                                {% csrf_token %}
-                                {% if redirect_field_value %}
-                                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-                                {% endif %}
-                                <a href="javascript:$('#logout_form').submit();" class="nav-link js-scroll-trigger" type="submit">Logout</a>
-                            </form>
-                        </li>
+        <!-- Start: Navigation with Button -->
+        <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
+            <div class="container"><a class="navbar-brand" href="/home">ZaRoc</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse"
+                    id="navcol-1">
+                    <ul class="nav navbar-nav mr-auto">
+                        <li class="nav-item" role="presentation"><a class="nav-link active" href="#">Halls</a></li>
                     </ul>
+                    <span class="navbar-text actions"> 
+                        <form id="logout_form" method="post" action="{% url 'account_logout' %}"> {% csrf_token %}
+                            <a class="login" href="#">kavyasuresh@gmail.com</a>
+                            <a class="login" href="#">About</a>
+							{% if redirect_field_value %}
+								<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+							{% endif %}
+                            <a href="javascript:$('#logout_form').submit();" class="btn action-button" style="background-color: #2e2a5f;" type="submit">Logout</a>
+                        </form>
+					</span>
                 </div>
             </div>
-        </nav>        
-        <br><br>
-        <header class="masthead" style="background-image:url('{% static 'images/intro-bg.jpg'%}');">
-            <div class="intro-body" style="max-width: 400px;margin: 0 auto;text-align: center;padding: 50px 0;/*box-shadow: 0 0 20px rgba(0,0,0,.4);*/border-radius: 3px;">
-                <div class="details-table">
-                    <div class="row">
-                        <div class="col">
-                            <h2 class="text-left intro-text bookTitle" style="font-size: 160%;margin: 0px 0px 0px 0px;">Hall Details</h2>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col" style="width: 20%;max-height: 45px;min-height: 30px;"><label class="col-form-label" style="width: 100%;height: 100%;">Hall No :</label></div>
-                        <div class="col" style="width: 45%;"><label class="col-form-label" style="width: 100%;height: 100%;">{{hall.no}}</label></div>
-                    </div>
-                    <div class="row">
-                        <div class="col" style="width: 20%;max-height: 45px;min-height: 30px;"><label class="col-form-label" style="width: 100%;height: 100%;">Hall Name :</label></div>
-                        <div class="col" style="width: 45%;"><label class="col-form-label" style="width: 100%;height: 100%;">{{hall.name}}</label></div>
-                        
-                    </div>
-                    <div class="row">
-                        <div class="col" style="width: 20%;max-height: 45px;min-height: 30px;"><label class="col-form-label" style="width: 100%;height: 100%;">capacity :</label></div>
-                        <div class="col" style="width: 45%;"><label class="col-form-label" style="width: 100%;height: 100%;">{{hall.capacity}}</label></div>
-                        
-                    </div>
-                    <div class="row">
-                        <div class="col" style="width: 20%;max-height: 45px;min-height: 30px;"><label class="col-form-label" style="width: 100%;height: 100%;">Incharge :</label></div>
-                        <div class="col" style="width: 45%;"><label class="col-form-label" style="width: 100%;height: 100%;">{{hall.inCharge}}</label></div>
-                        
-                    </div>
-                </div>
-                <div class="container shadow-lg BookContainer">
-                    <div>
-                        <!--form for date  and time -->
-						<h2>Book Hall</h2>
-                        <form action="{% url 'hall' %}" method='post' autocomplete="off"> {% csrf_token%}
-                            {{se_form}}
-                            <input type="submit" name="Tsearch" value="Book">
-                        </form>
-                        {% if t_exist == False %}
-                            <p>Hall is already booked in this time period</p>
-                        {% endif %}
-                        {% comment %} <!----------------------------> {% endcomment %}
-                    </div>
-                </div>
-                <div class="booked-table">
-                    {% comment %} <!------ Display Existing Bookings -------> {% endcomment %}
-                    {% if b_info %}
+        </nav>
+        <!-- End: Navigation with Button -->
+
+        <!-- Start: Projects Horizontal -->
+        <div class="projects-horizontal">
+            <div class="container">
+                <div class="row d-sm-flex d-md-flex d-lg-flex d-xl-flex justify-content-sm-center justify-content-md-center justify-content-lg-center justify-content-xl-center projects">
+                    <div class="col-sm-6 col-xl-8 item">
                         <div class="row">
+                            <div class="col-md-12 col-lg-5 col-xl-6"><a href="#"><img class="img-fluid" src="{% static 'images/'%}{{hall.no}}.jpg"></a></div>
                             <div class="col">
-                                <h2 class="intro-text bookTitle" style="font-size: 160%;margin: 0px 0px 1% 0px;">Booked Halls</h2>
+                                <h3 class="name">{{hall.name}}</h3>
+                                <p class="description"><strong>Hall No : </strong>{{hall.no}}</p>
+                                <p class="description"><strong>Hall Capacity : </strong>{{hall.capacity}}</p>
+                                <p class="description"><strong>Hall Incharge : </strong>{{hall.inCharge}}</p>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End: Projects Horizontal -->
+
+        <!-- Date - Time -->
+        <h4 class="text-center">BOOK</h4>
+        <div class="container d-sm-flex d-md-flex d-lg-flex d-xl-flex justify-content-sm-center justify-content-md-center justify-content-lg-center justify-content-xl-center" style="margin-top: 1%;">
+            <form class="form-inline d-sm-flex d-md-flex d-lg-flex justify-content-sm-center justify-content-md-center justify-content-lg-center" style="width: 709px;" action="{% url 'hall' %}" method='post' autocomplete="off"> {% csrf_token%}
+                    <div class="input-group">
+                    <span class="input-group-text">Date :&nbsp;
+                        <img src="{% static 'images/icons8-calendar-24.png'%}">
+                    </span>
+                    {% render_field date_form.date class="form-control" placeholder="dd/mm/yyyy" %}
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text">From :&nbsp;
+                        <img src="{% static 'images/icons8-calendar-24.png'%}">
+                    </span>
+                    {% render_field date_form.stime class="form-control" placeholder="hh:mm" %}
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text">To :&nbsp;
+                        <img src="{% static 'images/icons8-calendar-24.png'%}">
+                    </span>
+                    {% render_field date_form.etime class="form-control" placeholder="hh:mm" %}
+                </div>
+                <div class="input-group">
+                    <button class="btn btn-primary" type="submit"  name="hall_time_search" style="background-color: #234469;">Search</button>
+                </div>
+            </form>
+        </div>
+        {% if t_exist == False %}
+            <div> 
+                <h4> Choose Proper Date </h4>
+            </div>
+        {% endif %}
+        <!-- END : Date - Time -->
+        
+
+
+        {% comment %} <!------ Display Existing Bookings -------> {% endcomment %}
+        <div class="container" style="margin: 5em auto;">
+            {% if bookings %}
+                <div class="row d-sm-flex d-md-flex d-lg-flex d-xl-flex justify-content-sm-center justify-content-md-center justify-content-lg-center justify-content-xl-center projects">
+                    <div class="col item">
+                        <h4 class="name">Existing Bookings</h4>
                         <div class="table-responsive">
                             <table class="table">
-                                <thead style="color: rgb(255,255,255);">
-                                    <tr>  
-                                        <th>Booked by </th>                               
-                                        <th>Booking Id </th>
-                                        <th>Event name</th>
-                                        <th>Event Details</th>
+                                <thead>
+                                    <tr>
+                                        <th>Booked By</th>
+                                        <th>Booking Id</th>
+                                        <th>Event Name</th>
                                         <th>From</th>
-                                        <th>To</th>                                         
+                                        <th>To</th>
                                     </tr>
                                 </thead>
-                                <tbody style="color: rgba(255,255,255,0.93);">
-                                    {% for bookings in b_info %}
+                                <tbody>
+                                    {% for booking in bookings %}
                                         <tr>
-                                            <td>{{bookings.fId.username}}</td>
-                                            <td>{{bookings.bId}}</td>
-                                            <td>{{bookings.eventName}}</td>
-                                            <td>{{bookings.eventDetails}}</td>   
-                                            <td>{{bookings.sTime}}</td>
-                                            <td>{{bookings.eTime}}</td>                                     
+                                            <td>{{booking.fId.username}}</td>
+                                            <td>{{booking.bId}}</td>
+                                            {% comment %} <td>{{booking.eventDetails}}</td> {% endcomment %}
+                                            <td>{{booking.eventName}}</td>
+                                            <td>{{booking.sTime}}</td>
+                                            <td>{{booking.eTime}}</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
                         </div>
-                    {% else %}
-                        <h2> Hall has no Bookings</h2>
-                    {% endif %}
-                    {% comment %} <!----------------------------------------> {% endcomment %}
-                </div>   
-        </header>
-        <footer>
-            <div class="container text-center">
-                <p>@ZaRoc &amp; Co.</p>
-            </div>
-        </footer>
+                    </div>
+                </div>
+            {% else %}
+                <h4> No Bookings Exist </h4>
+            {% endif %}
+        </div>
+        {% comment %} <!--- End : Display Existing Bookings ---> {% endcomment %}
+
+        <!-- Start: Footer Basic -->
+        <div class="footer-basic">
+            <footer>
+                <!-- Start: Social Icons -->
+                <div class="social"><a href="#"><i class="icon ion-social-instagram"></i></a><a href="#"><i class="icon ion-social-facebook"></i></a></div>
+                <!-- End: Social Icons -->
+                <!-- Start: Links -->
+                <ul class="list-inline">
+                    <li class="list-inline-item"><a href="#">Home</a></li>
+                    <li class="list-inline-item"><a href="#">About</a></li>
+                    <li class="list-inline-item"><a href="#">Terms</a></li>
+                </ul>
+                <!-- End: Links -->
+                <!-- Start: Copyright -->
+                <p class="copyright">ZaRoc © 2020</p>
+                <!-- End: Copyright -->
+            </footer>
+        </div>
+        <!-- End: Footer Basic -->
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
         <script src="{% static 'js/grayscale.js'%}"></script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
+            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script> -->
+        <script src="{% static 'js/timedropper.min.js'%}"></script>
+        <script src="{% static 'js/datedropper.pro.min.js'%}"></script>
         <script>
             $(function () {
-            $("#id_sdate").datetimepicker({format: 'd/m/Y H:i',});
-            $("#id_edate").datetimepicker({format: 'd/m/Y H:i',});
-        });
+                $("#id_date").dateDropper({ format: 'd/m/Y',largeOnly: true});
+                $("#id_stime").timeDropper({meridians: true,setCurrentTime:true,primaryColor:'#2e2a5f',borderColor:'#2e2a5f'});
+                $("#id_etime").timeDropper({meridians: true,setCurrentTime:true,primaryColor:'#2e2a5f',borderColor:'#2e2a5f'});
+             });
         </script>
+        <script src="{% static 'js/script.js'%}"></script>
     {% else %}
         <script>
             window.location = "{% url 'signin' %}";

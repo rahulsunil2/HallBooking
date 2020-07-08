@@ -1,127 +1,130 @@
+{% comment %} <form action="{% url 'book' %}" method='post' autocomplete="off"> {% csrf_token%}
+    {{desc_form.as_p}}
+    <input type="submit" name="book" value="submit&book">
+</form> {% endcomment %}
+
+{% comment %} ----------------------------------------------------- {% endcomment %}
+
 {% load staticfiles %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
 <html>
 <head>
     <title>ZaRoc</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <link rel = "icon" href = "{% static 'images/logo.png' %}" type = "image/x-icon"> 
 
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css'%}">
+    {% comment %} <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css'%}"> {% endcomment %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
 
-    {% comment %} font {% endcomment %}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    {% comment %} font - fe {% endcomment %}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cabin:700">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    {% comment %} local {% endcomment %}
-    <link rel="stylesheet" href="{% static 'css/untitled.css'%}">
+    {% comment %} loca {% endcomment %}
+     <link rel="stylesheet" href="{% static 'css/Footer-Basic.css'%}">
+    <link rel="stylesheet" href="{% static 'css/Navigation-with-Button.css'%}">
+    <link rel="stylesheet" href="{% static 'css/Projects-Clean.css'%}">
+    <link rel="stylesheet" href="{% static 'css/Projects-Horizontal.css'%}">
 </head>
 
 <body>
-    <H1> BOOK.html </H1>
-
     {% if user.is_authenticated %}
-        <nav class="navbar navbar-light navbar-expand-md bg-dark navbar navbar-expand-lg fixed-top" id="mainNav">
-            <div class="container">
-                <a class="navbar-brand js-scroll-trigger" href="#">HALL BOOKING</a>
-                <button data-toggle="collapse" class="navbar-toggler navbar-toggler-right" data-target="#navbarResponsive" type="button" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" value="Menu"><i class="fa fa-bars"></i></button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="nav navbar-nav ml-auto">
-                        <li class="nav-item nav-link js-scroll-trigger" role="presentation"><a class="nav-link active js-scroll-trigger" href="#">{{user}}</a></li>
-                        <li class="nav-item nav-link js-scroll-trigger" role="presentation"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
-                        <li class="nav-item nav-link js-scroll-trigger" role="presentation">
-                            <form id="logout_form" method="post" action="{% url 'account_logout' %}">
-                                {% csrf_token %}
-                                {% if redirect_field_value %}
-                                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-                                {% endif %}
-                                <a href="javascript:$('#logout_form').submit();" class="nav-link js-scroll-trigger" type="submit">Logout</a>
-                            </form>
-                        </li>
+        <!-- Start: Navigation with Button -->
+        <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
+            <div class="container"><a class="navbar-brand" href="/home">ZaRoc</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse"
+                    id="navcol-1">
+                    <ul class="nav navbar-nav mr-auto">
+                        <li class="nav-item" role="presentation"><a class="nav-link active" href="#">Halls</a></li>
                     </ul>
+                    <span class="navbar-text actions"> 
+                        <form id="logout_form" method="post" action="{% url 'account_logout' %}"> {% csrf_token %}
+                            <a class="login" href="#">kavyasuresh@gmail.com</a>
+                            <a class="login" href="#">About</a>
+							{% if redirect_field_value %}
+								<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+							{% endif %}
+                            <a href="javascript:$('#logout_form').submit();" class="btn action-button" style="background-color: #0051ba;" type="submit">Logout</a>
+                        </form>
+					</span>
                 </div>
             </div>
         </nav>
-        <header class="masthead" style="background-image:url('{% static 'images/intro-bg.jpg'%}');">
-            <div class="intro-body" style="max-width: 400px;margin: 0 auto;text-align: center;padding: 50px 0;/*box-shadow: 0 0 20px rgba(0,0,0,.4);*/border-radius: 3px;">
-                <div class="details-table">
-                    <div class="row">
-                        <div class="col">
-                            <h2 class="text-left intro-text bookTitle" style="font-size: 160%;margin: 0px 0px 0px 0px;">Hall Details</h2>
+        <!-- End: Navigation with Button -->
+        <!-- Start: Projects Clean -->
+        <div class="projects-clean">
+            <div class="container">
+                <form action="{% url 'book' %}" method='post' autocomplete="off"> {% csrf_token%}
+                    <!-- Start: Projects -->
+                    <div class="form-row d-flex d-md-flex d-lg-flex d-xl-flex justify-content-center justify-content-md-center justify-content-lg-center justify-content-xl-center projects" style="padding: 8;">
+                        <div class="col-sm-6 col-lg-4 col-xl-6 item" style="min-width: 345px;">
+                            <div class="card" style="width: 100%;border-radius: 2rem;"><img class="card-img w-100 d-block" src="{% static 'images/'%}{{hall.no}}.jpg" style="border-radius: 2rem;">
+                                <div class="card-img-overlay d-flex flex-column justify-content-center" style="background-color: rgba(0,0,0,0.69);color: rgb(255,255,255);border-radius: 2rem;">
+                                    <h4><strong>Hall Details</strong></h4>
+                                    <p style="color: rgb(219,219,220);"><strong>Hall Name :</strong>&nbsp;{{hall.name}}</p></p>
+                                    <p style="color: rgb(219,219,220);"><strong>Hall No :</strong>&nbsp;{{hall.no}}</p>
+                                    <p style="color: rgb(219,219,220);"><strong>Hall Capacity :</strong>&nbsp;{{hall.capacity}}</p>
+                                    <p style="color: rgb(219,219,220);"><strong>Hall Incharge :</strong>&nbsp;{{hall.inCharge}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-4 col-xl-6 item" style="min-width: 345px;">
+                            <h3 class="name">Event Details</h3>
+                            <p class="description"><strong>From :</strong> {{sdate}}</p>
+                            <p class="description"><strong>To :</strong> {{edate}}</p>
+                            <p class="description"><strong>Title :</strong></p>
+                            {% comment %} <input class="form-control" type="text"> {% endcomment %}
+                            {% render_field desc_form.title class="form-control" placeholder="enter event title/name" %}
+                            <p class="description"><strong>Description :&nbsp;</strong></p>
+                            {% comment %} <textarea class="form-control"></textarea> {% endcomment %}
+                            {% render_field desc_form.description class="form-control" placeholder="enter event details" %}
+                            <div class="form-row" style="margin-top: 13px;">
+                                <div class="col d-flex d-xl-flex justify-content-end justify-content-xl-center">
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-primary" type="submit" name="book" style="background-color: #0051ba;">Confirm</button>
+                                    </div>
+                                </div> 
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col" style="width: 20%;max-height: 45px;min-height: 30px;"><label class="col-form-label" style="width: 100%;height: 100%;">Hall No :</label></div>
-                        <div class="col" style="width: 45%;"><label class="col-form-label" style="width: 100%;height: 100%;">{{hall.no}}</label></div>
-                    </div>
-                    <div class="row">
-                        <div class="col" style="width: 20%;max-height: 45px;min-height: 30px;"><label class="col-form-label" style="width: 100%;height: 100%;">Hall Name :</label></div>
-                        <div class="col" style="width: 45%;"><label class="col-form-label" style="width: 100%;height: 100%;">{{hall.name}}</label></div>
-                        
-                    </div>
-                    <div class="row">
-                        <div class="col" style="width: 20%;max-height: 45px;min-height: 30px;"><label class="col-form-label" style="width: 100%;height: 100%;">From :</label></div>
-                        <div class="col" style="width: 45%;"><label class="col-form-label" style="width: 100%;height: 100%;">{{sdate}}</label></div>
-                        
-                    </div>
-                    <div class="row">
-                        <div class="col" style="width: 20%;max-height: 45px;min-height: 30px;"><label class="col-form-label" style="width: 100%;height: 100%;">To :</label></div>
-                        <div class="col" style="width: 45%;"><label class="col-form-label" style="width: 100%;height: 100%;">{{edate}}</label></div>
-                        
-                    </div>
-                    <div class="row">
-                        <div class="col" style="width: 20%;max-height: 45px;min-height: 30px;"><label class="col-form-label" style="width: 100%;height: 100%;">capacity :</label></div>
-                        <div class="col" style="width: 45%;"><label class="col-form-label" style="width: 100%;height: 100%;">{{hall.capacity}}</label></div>
-                        
-                    </div>
-                    <div class="row">
-                        <div class="col" style="width: 20%;max-height: 45px;min-height: 30px;"><label class="col-form-label" style="width: 100%;height: 100%;">Incharge :</label></div>
-                        <div class="col" style="width: 45%;"><label class="col-form-label" style="width: 100%;height: 100%;">{{hall.inCharge}}</label></div>
-                        
-                    </div>
-                </div>
-                <div class="container shadow-lg BookContainer">
-                    <div class="row">
-                        <div class="col">
-                            <h1 class="intro-text bookTitle" style="font-size: 160%;margin: 0px 0px 0px 0px;">Event Details</h1>
-                        </div>
-                    </div>                
-                    <div>
-                        <!-- form for title & desc --->
-                        <form action="{% url 'book' %}" method='post' autocomplete="off"> {% csrf_token%}
-                                {{desc_form.as_p}}
-                                <input type="submit" name="book" value="submit&book">
-                            <!---------------------------->
-                            <!-- <div class="form-row">
-                                <div class="col" style="width: 20%;max-height: 45px;min-height: 30px;"><label class="col-form-label" style="width: 100%;height: 100%;">Title :</label></div>
-                                <div class="col" style="width: 45%;"><input class="form-control" type="text"></div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col" style="width: 20%;max-height: 45px;min-height: 30px;"><label class="col-form-label" style="width: 100%;height: 100%;">Description :</label></div>
-                                <div class="col" style="width: 45%;"><textarea class="form-control"></textarea></div>
-                            </div> -->
-                            <div class="form-row">
-                                <!-- <div class="col offset-xl-0"><button class="btn btn-primary btn-block border-secondary d-flex d-lg-flex flex-grow-1 flex-shrink-1 justify-content-center align-items-center align-self-end flex-nowrap order-1 ml-auto justify-content-lg-center align-items-lg-center book" type="submit" value="submit&book" >Confirm</button></div> -->
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                    <!-- End: Projects -->
+                </form>
             </div>
-        </header>
-        <footer>
-            <div class="container text-center">
-                <p>@ZaRoc &amp; Co.</p>
-            </div>
-        </footer>
+        </div>
+        <!-- End: Projects Clean -->
+        <!-- Start: Footer Basic -->
+        <div class="footer-basic">
+            <footer>
+                <!-- Start: Social Icons -->
+                <div class="social"><a href="#"><i class="icon ion-social-instagram"></i></a><a href="#"><i class="icon ion-social-facebook"></i></a></div>
+                <!-- End: Social Icons -->
+                <!-- Start: Links -->
+                <ul class="list-inline">
+                    <li class="list-inline-item"><a href="#">Home</a></li>
+                    <li class="list-inline-item"><a href="#">About</a></li>
+                    <li class="list-inline-item"><a href="#">Terms</a></li>
+                </ul>
+                <!-- End: Links -->
+                <!-- Start: Copyright -->
+                <p class="copyright">ZaRoc © 2020</p>
+                <!-- End: Copyright -->
+            </footer>
+        </div>
+        <!-- End: Footer Basic -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-        <script src="assets/js/grayscale.js"></script>
-
+		<script src="{% static 'js/grayscale.js'%}"></script>
     {% else %}
-        <script>
-            window.location = "{% url 'signin' %}";
-        </script>
-    {% endif %}
+		<script>
+			window.location = "{% url 'signin' %}";
+		</script>
+	{% endif %}
 </body>
 </html>

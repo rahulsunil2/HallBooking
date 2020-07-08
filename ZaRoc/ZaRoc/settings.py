@@ -8,6 +8,28 @@ https://docs.djangoproject.com/en/2.0/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
+
+astroid==2.4.1
+certifi==2020.4.5.1
+chardet==3.0.4
+defusedxml==0.6.0
+Django==2.2
+django-allauth==0.42.0
+idna==2.9
+isort==4.3.21
+lazy-object-proxy==1.4.3
+mccabe==0.6.1
+numpy==1.18.4
+oauthlib==3.1.0
+opencv-contrib-python==4.2.0.34
+pylint==2.5.2
+python3-openid==3.1.0
+pytz==2020.1
+requests==2.23.0
+requests-oauthlib==1.3.0
+sqlparse==0.3.1
+urllib3==1.25.9
+wrapt==1.12.1
 """
 
 import os
@@ -43,7 +65,8 @@ INSTALLED_APPS = [
     'allauth',   
     'allauth.account',  
     'allauth.socialaccount',   
-    'allauth.socialaccount.providers.google',  
+    'allauth.socialaccount.providers.google',
+    'widget_tweaks',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -92,7 +115,6 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'bookings.mbcet@gmail.com'
 EMAIL_HOST_PASSWORD = 'Hallbookingmbcet'
 EMAIL_PORT = 587
-
 #PASSWORD_RESET_TIMEOUT_DAYS=1
 
 # Password validation
