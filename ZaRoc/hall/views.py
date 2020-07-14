@@ -165,9 +165,9 @@ def confirm(request,uid,token,bid):
         booking_info = Booking.objects.get(bId = force_text(urlsafe_base64_decode(bid)))
     except:
         print("---- An exception occurred ------------------")
-        return HttpResponse("Already Rejected")
+        return render(request,'con.html',{'st':"Booking Already Rejected !!"})
     if(booking_info.status == 'confirmed' ):
-        return HttpResponse("Already Confirmed")
+        return render(request,'con.html',{'st':"Booking Already Confirmed !!"})
     hall = Hall.objects.get(name = booking_info.hallNo)
     return render(request,'confirm_booking.html',{'uid':uid,'token':token,'bid':bid,'stat':'rejected','booking':booking_info, 'hall':hall})
 
@@ -193,7 +193,7 @@ def verified(request,uid,token,bid,stat):
                 msg = "Confirmed " + x.eventName
                 mail = EmailMessage(sub,msg,to=[email])
                 mail.send()
-                return HttpResponse("booking confirmed")
+                return render(request,'con.html',{'st':"Booking Confirmed"})
             else:
                 x.delete()
                 email = user.email
@@ -201,6 +201,6 @@ def verified(request,uid,token,bid,stat):
                 msg = "Rejected " + x.eventName
                 mail = EmailMessage(sub,msg,to=[email])
                 mail.send()
-                return HttpResponse("booking rejected")
+                return render(request,'con.html',{'st':"Booking Rejected"})
     else:
         return HttpResponse("bookings not confirmed ")
