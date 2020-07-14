@@ -16,7 +16,7 @@ from django.contrib.sites.models import Site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, EmailMultiAlternatives
 from .tokens import *
 
 def signin(request):
@@ -154,7 +154,8 @@ def book(request):
             print(body) 
             subject = "Verify Hall booking"
             to_mail = "bookings.mbcet@gmail.com"
-            mail = EmailMessage(subject,body,to=[to_mail])
+            mail = EmailMultiAlternatives(subject,body,to=[to_mail])
+            mail.attach_alternative(body, "text/html")
             mail.send()
 
             return HttpResponseRedirect('/home/')
