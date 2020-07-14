@@ -1,0 +1,114 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+		<title>ZaRoc</title>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+	<link rel = "icon" href = "{% static 'images/logo.png' %}" type = "image/x-icon"> 
+    <style>body {font-family: Arial, sans-serif;}</style>
+
+	{% comment %} bootstrap - for frontend {%  endcomment %}
+	{% comment %} <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css"> {% endcomment %}
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css'%}">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+    <!-- XDSoft DateTimePicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" /> 
+
+    {% comment %} font {% endcomment %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cabin:700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="{% static 'fonts/font-awesome.min.css'%}">
+    <link rel="stylesheet" href="{% static 'fonts/ionicons.min.css'%}">
+
+    {% comment %} local - for frontend {% endcomment %}
+    <link rel="stylesheet" href="{% static 'css/Footer-Basic.css'%}">
+    <link rel="stylesheet" href="{% static 'css/Navigation-with-Button.css'%}">
+    <link rel="stylesheet" href="{% static 'css/Projects-Clean.css'%}">
+    <link rel="stylesheet" href="{% static 'css/Projects-Horizontal.css'%}">
+    <link rel="stylesheet" href="{% static 'css/untitled.css'%}">
+    </head>
+
+</head>
+
+<body>
+	{% if user.is_authenticated %}
+		<!-- Start: Navigation with Button -->
+		<nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
+			<div class="container"><a class="navbar-brand" href="#">ZaRoc</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+				<div class="collapse navbar-collapse"
+					id="navcol-1">
+					<ul class="nav navbar-nav mr-auto">
+						<li class="nav-item" role="presentation"><a class="nav-link active" href="#">Halls</a></li>
+					</ul>
+					<span class="navbar-text actions"> 
+                        <form id="logout_form" method="post" action="{% url 'account_logout' %}"> {% csrf_token %}
+                            {% comment %} <a class="login" href="#">{{user.email}}</a> {% endcomment %}
+                            <a class="login" href="#">About</a>
+							{% comment %} 7 {% endcomment %}
+                            {% comment %} <a href="javascript:$('#logout_form').submit();" class="btn action-button" style="background-color: #2e2a5f;" type="submit">Logout</a> {% endcomment %}
+                        </form>
+					</span>
+				</div>
+			</div>
+		</nav>
+		<!-- End: Navigation with Button -->
+		<!-- Start: Projects Horizontal -->
+		<div class="projects-horizontal" style="margin-top:5%">
+			<div class="container">
+				<!-- Start: Intro -->
+				<div class="intro">
+					<h2 class="text-center">{{st}}</h2>
+				</div>
+			</div>
+		</div>
+		<!-- End: Projects Horizontal -->
+		<!-- Start: Footer Basic -->
+		<div class="footer-basic" style="margin-top:20%">
+			<footer>
+				<!-- Start: Social Icons -->
+				<div class="social"><a href="#"><i class="icon ion-social-instagram"></i></a><a href="#"><i class="icon ion-social-facebook"></i></a></div>
+				<!-- End: Social Icons -->
+				<!-- Start: Links -->
+				<ul class="list-inline">
+					<li class="list-inline-item"><a href="#">Home</a></li>
+					<li class="list-inline-item"><a href="#">About</a></li>
+					<li class="list-inline-item"><a href="#">Terms</a></li>
+				</ul>
+				<!-- End: Links -->
+				<!-- Start: Copyright -->
+				<p class="copyright">ZaRoc © 2020</p>
+				<!-- End: Copyright -->
+			</footer>
+		</div>
+		<!-- End: Footer Basic -->
+
+		{% comment %} - for frontend {% endcomment %}
+		{% comment %} <script src="{% static 'js/jquery.min.js'%}"></script> {% endcomment %}
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		{% comment %} <script src="{% static
+		 'bootstrap/js/bootstrap.min.js'%}"></script> {% endcomment %}
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+		{% comment %} --------------- {% endcomment %}
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+		<script src="{% static 'js/grayscale.js'%}"></script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+		<script>
+			$(function () {
+			$("#id_sdate").datetimepicker({format: 'd/m/Y H:i',});
+			$("#id_edate").datetimepicker({format: 'd/m/Y H:i',});
+		});
+		</script>
+	{% else %}
+		<script>
+			window.location = "{% url 'signin' %}";
+		</script>
+	{% endif %}
+</body>
+</html>
