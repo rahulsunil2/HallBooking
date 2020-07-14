@@ -1,8 +1,13 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <p>{{ user.username }} has requested a hall booking.</p>
 
-{% autoescape off %}
-{{ user.username }} has requested a hall booking.
+        <p>click here to confirm the booking</p>
 
-click here to confirm the booking
-
-http://{{ domain }}{% url 'confirm' uid=uid token=token bid=bid %}
-{% endautoescape %}
+        <a href="http://{{ domain }}{% url 'confirm' uid=uid token=token bid=bid %}">
+             <button>Verify</button>
+        </a>
+    </body>
+</html>
