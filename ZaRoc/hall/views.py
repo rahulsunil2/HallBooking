@@ -25,14 +25,14 @@ def signin(request):
 # home
 def home(request):
     # email check
-    try:
-        x = Staff.objects.get(email = request.user.email)
-    except:
-        #flush session & redirect
-        request.session.flush()
-        logout(request)
-        messages.info(request, "Use Correct Email-id")
-        return redirect('account_logout')
+    # try:
+    #     x = Staff.objects.get(email = request.user.email)
+    # except:
+    #     #flush session & redirect
+    #     request.session.flush()
+    #     logout(request)
+    #     messages.info(request, "Use Correct Email-id")
+    #     return redirect('account_logout')
     
     # when "hall based search" is pressed
     if 'hall_search' in request.POST:
