@@ -205,3 +205,9 @@ def verified(request,uid,token,bid,stat):
                 return render(request,'conf_page.html',{'st':"Booking Rejected"})
     else:
         return HttpResponse("bookings not confirmed ")
+
+def details(request):
+    all_halls = Hall.objects.all()
+    print("******************************************")
+    print(all_halls)
+    return render(request,'details.html',{'halls':all_halls,})
