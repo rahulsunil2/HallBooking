@@ -1,0 +1,37 @@
+{% extends 'home.html' %}
+
+{% block content %}
+
+<nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
+    <div class="container"><a class="navbar-brand" href="/home">ZaRoc</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse"
+            id="navcol-1">
+            <ul class="nav navbar-nav mr-auto">
+                <li class="nav-item" role="presentation"><a class="nav-link" href="/details">Halls</a></li>
+            </ul>
+            <span class="navbar-text actions"> 
+                {% if user.is_authenticated %}
+                    <form id="logout_form" method="post" action="{% url 'account_logout' %}"> {% csrf_token %}
+                        <a class="login" href="#">{{user.email}}</a>
+                        <a class="login" href="#">About</a>
+                        {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                        {% endif %}
+                        <a href="javascript:$('#logout_form').submit();" class="btn action-button" style="background-color: #2e2a5f;" type="submit">Logout</a>
+                    </form>
+                {% else %}
+                    <form method="post" id="login_form" action="{% provider_login_url "google" action="reauthenticate" %}"> {% csrf_token %}
+                        {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                        {% endif %}	
+                        <a class="login" href="#">About</a>
+                        <a href="javascript:$('#login_form').submit();" class="btn action-button" style="background-color: #2e2a5f;" type="submit">Signin</a> 
+                    </form>                          
+                {% endif %}    
+            </span>
+        </div>
+    </div>
+</nav>
+<!-- End: Navigation with Button -->    
+
+{% endblock %}
