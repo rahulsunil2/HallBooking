@@ -38,26 +38,9 @@
 
 <body>
 	{% if user.is_authenticated %}
-		<!-- Start: Navigation with Button -->
-		<nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
-			<div class="container"><a class="navbar-brand" href="#">ZaRoc</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-				<div class="collapse navbar-collapse"
-					id="navcol-1">
-					<ul class="nav navbar-nav mr-auto">
-						<li class="nav-item" role="presentation"><a class="nav-link active" href="#">Halls</a></li>
-					</ul>
-					<span class="navbar-text actions"> 
-                        <form id="logout_form" method="post" action="{% url 'account_logout' %}"> {% csrf_token %}
-                            {% comment %} <a class="login" href="#">{{user.email}}</a> {% endcomment %}
-                            <a class="login" href="#">About</a>
-							{% comment %} 7 {% endcomment %}
-                            {% comment %} <a href="javascript:$('#logout_form').submit();" class="btn action-button" style="background-color: #2e2a5f;" type="submit">Logout</a> {% endcomment %}
-                        </form>
-					</span>
-				</div>
-			</div>
-		</nav>
-		<!-- End: Navigation with Button -->
+		
+		{% include 'nav.html' %}
+
 		<!-- Start: Projects Horizontal -->
 		<div class="projects-horizontal" style="margin-top:5%">
 			<div class="container">

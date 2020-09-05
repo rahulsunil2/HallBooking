@@ -46,87 +46,8 @@
 </head>
 <body>
 
-    <!-- <nav class="navbar navbar-light navbar-expand-md navigation-clean-button">
-        <div class="container"><a class="navbar-brand" href="/home">ZaRoc</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse"
-                id="navcol-1">
-                <ul class="nav navbar-nav mr-auto">
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="/details">Halls</a></li>
-                </ul>
-                <span class="navbar-text actions"> 
-                    {% if user.is_authenticated %}
-                        <form id="logout_form" method="post" action="{% url 'account_logout' %}"> {% csrf_token %}
-                            <a class="login" href="#">{{user.email}}</a>
-                            <a class="login" href="#">About</a>
-                            {% if redirect_field_value %}
-                                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-                            {% endif %}
-                            <a href="javascript:$('#logout_form').submit();" class="btn action-button" style="background-color: #2e2a5f;" type="submit">Logout</a>
-                        </form>
-                    {% else %}
-                        <form method="post" id="login_form" action="{% provider_login_url "google" action="reauthenticate" %}"> {% csrf_token %}
-                            {% if redirect_field_value %}
-                                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-                            {% endif %}	
-                            <a class="login" href="#">About</a>
-                            <a href="javascript:$('#login_form').submit();" class="btn action-button" style="background-color: #2e2a5f;" type="submit">Signin</a> 
-                        </form>                          
-                    {% endif %}    
-                </span>
-            </div>
-        </div>
-    </nav> -->
-    {% block content %}
-    {% endblock %}
-    <!-- End: Navigation with Button -->
-    <!-- partial:index.partial.html -->
-    <div class="wrapper">
-
-        <!-- back thing -->
-        <div class="background">
-            <div class="content invisible">
-                <h2>Book By Time</h2>
-                <p>Have an event with fixed Time ?</p>
-                <button id="left-button">GO</button>
-            </div>
-            <div class="content visible">
-                <h2>Book By Hall</h2>
-                <p>Have a particular hall in mind ?</p>
-                <button id="right-button">GO</button>
-            </div>
-        </div>
-
-        <!-- front thing -->
-        <div class="foreground">
-        
-            <div class="content visible">
-                <h2>Book By Time</h2>
-                <form id="login" action="{% url 'home' %}" method='post' autocomplete="off"> {% csrf_token%}
-                    
-                    <label for="login-email">From : </label>
-                    {% render_field date_form.sdate placeholder="dd/mm/yyyy hh:mm" %}
-                    {% comment %} <input type="date" id="login-email" name="email" placeholder="From"> {% endcomment %}                        
-                    <label for="login-password">To : </label>
-                    {% render_field date_form.edate placeholder="dd/mm/yyyy hh:mm" %}
-                    {% comment %} <input type="date" id="login-email" name="email" placeholder="To"> {% endcomment %}
-                </form>
-                <div class="row">
-                    <button type="submit" name="time_search" form="login" value="Login" value="check availability">Search Hall</button> 
-                </div>
-            </div>
-        
-            <div class="content invisible">
-                <h2>Book By Hall</h2>
-                <form id="register" action="{% url 'home' %}" method='post' autocomplete="off"> {% csrf_token%}
-                    <label for="name">Hall : </label>
-                    <!-- <input type="text" id="name" name="name" placeholder="Choose Hall"> -->
-                    {% render_field hall_form.hall_name id="name" placeholder="Choose Hall" %}
-                </form>
-                <button type="submit" name="hall_search" form="register" value="register">Search</button>
-            </div>
-        
-        </div>            
-    </div>
+    {% include 'nav.html' %}
+    
     {% if user.is_authenticated %}
     <div class="booked-table">
         <a href="{% url 'exportcsv' %}">Export all bookings</a>
@@ -180,6 +101,56 @@
         {% comment %} <!----------------------------------------> {% endcomment %}
     </div>
     {% endif %}
+    <!-- End: Navigation with Button -->
+    <!-- partial:index.partial.html -->
+    <div class="wrapper">
+
+        <!-- back thing -->
+        <div class="background">
+            <div class="content invisible">
+                <h2>Book By Time</h2>
+                <p>Have an event with fixed Time ?</p>
+                <button id="left-button">GO</button>
+            </div>
+            <div class="content visible">
+                <h2>Book By Hall</h2>
+                <p>Have a particular hall in mind ?</p>
+                <button id="right-button">GO</button>
+            </div>
+        </div>
+
+        <!-- front thing -->
+        <div class="foreground">
+        
+            <div class="content visible">
+                <h2>Book By Time</h2>
+                <form id="login" action="{% url 'home' %}" method='post' autocomplete="off"> {% csrf_token%}
+                    
+                    <label for="login-email">From : </label>
+                    {% render_field date_form.sdate placeholder="dd/mm/yyyy hh:mm" %}
+                    {% comment %} <input type="date" id="login-email" name="email" placeholder="From"> {% endcomment %}                        
+                    <label for="login-password">To : </label>
+                    {% render_field date_form.edate placeholder="dd/mm/yyyy hh:mm" %}
+                    {% comment %} <input type="date" id="login-email" name="email" placeholder="To"> {% endcomment %}
+                </form>
+                <div class="row">
+                    <button type="submit" name="time_search" form="login" value="Login" value="check availability">Search Hall</button> 
+                </div>
+            </div>
+        
+            <div class="content invisible">
+                <h2>Book By Hall</h2>
+                <form id="register" action="{% url 'home' %}" method='post' autocomplete="off"> {% csrf_token%}
+                    <label for="name">Hall : </label>
+                    <!-- <input type="text" id="name" name="name" placeholder="Choose Hall"> -->
+                    {% render_field hall_form.hall_name id="name" placeholder="Choose Hall" %}
+                </form>
+                <button type="submit" name="hall_search" form="register" value="register">Search</button>
+            </div>
+        
+        </div>            
+    </div>
+    
         <!-- partial -->
     <!-- Start: Footer Basic -->
     <div class="footer-basic">
